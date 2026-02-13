@@ -499,6 +499,20 @@ body {
   height: 14px;
 }
 
+/* ── Section Progress Bar ── */
+.section-progress-bar {
+  height: 3px;
+  background: var(--bg-input);
+  margin: 0 18px;
+}
+.section-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--cyan));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+.section.collapsed .section-progress-bar { display: none; }
+
 /* ── Section Body ── */
 .section-body {
   padding: 0 18px 18px;
@@ -1386,6 +1400,13 @@ function renderSection(section, mode, isNewTab) {
 
   el.appendChild(header);
 
+  // Section progress bar
+  const pct = totalCount > 0 ? Math.round((answeredCount / totalCount) * 100) : 0;
+  const progressBar = document.createElement('div');
+  progressBar.className = 'section-progress-bar';
+  progressBar.innerHTML = `<div class="section-progress-fill" style="width:${pct}%"></div>`;
+  el.appendChild(progressBar);
+
   // Body
   const body = document.createElement('div');
   body.className = 'section-body';
@@ -1450,8 +1471,23 @@ function handleInput(el) {
   const card = el.closest('.question-card');
   if (card) card.classList.toggle('answered', el.value.trim() !== '');
 
+  // Update section progress bar
+  const sectionEl = el.closest('.section');
+  if (sectionEl) updateSectionProgress(sectionEl);
+
   saveState();
   updateStats();
+}
+
+function updateSectionProgress(sectionEl) {
+  const cards = sectionEl.querySelectorAll('.question-card');
+  const total = cards.length;
+  const answered = Array.from(cards).filter(c => c.classList.contains('answered')).length;
+  const pct = total > 0 ? Math.round((answered / total) * 100) : 0;
+  const fill = sectionEl.querySelector('.section-progress-fill');
+  if (fill) fill.style.width = pct + '%';
+  const counter = sectionEl.querySelector('.section-progress');
+  if (counter) counter.textContent = answered + '/' + total;
 }
 
 function setMode(mode) {
