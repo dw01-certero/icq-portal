@@ -533,6 +533,44 @@ body {
 }
 .section.collapsed .section-progress-bar { display: none; }
 
+/* ── Section Assignee ── */
+.section-assignee {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.section.collapsed .section-assignee { display: none; }
+.section-assignee-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.section-assignee input {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  flex: 1;
+  min-width: 140px;
+}
+.section-assignee input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.section-assignee input::placeholder { color: var(--text-muted); }
+
 /* ── Section Body ── */
 .section-body {
   padding: 0 18px 18px;
@@ -1262,6 +1300,7 @@ let state = {
   sectionsInScope: {},
   sectionsCollapsed: {},
   activeTab: 'full',
+  sectionAssignees: {},
   auditLog: []
 };
 let saveTimeout = null;
@@ -1395,6 +1434,7 @@ function saveProgress() {
     responses: state.responses,
     sectionsInScope: state.sectionsInScope,
     sectionsCollapsed: state.sectionsCollapsed,
+    sectionAssignees: state.sectionAssignees,
     activeTab: state.activeTab,
     auditLog: state.auditLog
   };
@@ -1428,6 +1468,7 @@ function loadProgressFile(input, fromGate) {
       state.responses = data.responses || {};
       state.sectionsInScope = data.sectionsInScope || {};
       state.sectionsCollapsed = data.sectionsCollapsed || {};
+      state.sectionAssignees = data.sectionAssignees || {};
       state.activeTab = data.activeTab || 'full';
       state.auditLog = data.auditLog || [];
       // Re-initialize any missing scope defaults
@@ -1551,6 +1592,18 @@ function renderSection(section, mode, isNewTab) {
   progressBar.innerHTML = `<div class="section-progress-fill" style="width:${pct}%"></div>`;
   el.appendChild(progressBar);
 
+  // Assignee row
+  const assignee = state.sectionAssignees[section.id] || {};
+  const assigneeRow = document.createElement('div');
+  assigneeRow.className = 'section-assignee';
+  assigneeRow.innerHTML = `
+    <span class="section-assignee-label">Assigned to</span>
+    <input type="text" placeholder="Name..." value="${escapeAttr(assignee.name || '')}" data-section="${section.id}" data-field="name" oninput="handleAssignee(this)" />
+    <input type="email" placeholder="Email..." value="${escapeAttr(assignee.email || '')}" data-section="${section.id}" data-field="email" oninput="handleAssignee(this)" />
+  `;
+  assigneeRow.addEventListener('click', (e) => e.stopPropagation());
+  el.appendChild(assigneeRow);
+
   // Body
   const body = document.createElement('div');
   body.className = 'section-body';
@@ -1645,6 +1698,16 @@ function updateSectionProgress(sectionEl) {
   if (fill) fill.style.width = pct + '%';
   const counter = sectionEl.querySelector('.section-progress');
   if (counter) counter.textContent = answered + '/' + total;
+}
+
+function handleAssignee(el) {
+  const sectionId = el.dataset.section;
+  const field = el.dataset.field;
+  if (!state.sectionAssignees[sectionId]) {
+    state.sectionAssignees[sectionId] = { name: '', email: '' };
+  }
+  state.sectionAssignees[sectionId][field] = el.value;
+  saveState();
 }
 
 function setMode(mode) {
@@ -1745,6 +1808,7 @@ function exportJSON() {
       id: section.id,
       title: section.title,
       inScope: inScope,
+      assignedTo: state.sectionAssignees[section.id] || null,
       questions: []
     };
 
@@ -1792,6 +1856,7 @@ function doReset() {
     responses: {},
     sectionsInScope: {},
     sectionsCollapsed: {},
+    sectionAssignees: {},
     activeTab: 'full',
     auditLog: preservedLog
   };
