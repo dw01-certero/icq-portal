@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Certero ICQ Portal</title>
+<title>ITAM ICQ</title>
 <style>
 /* ── CSS Variables & Theme ── */
 :root {
@@ -43,6 +43,157 @@ body {
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── Gate Modal ── */
+.gate-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s;
+}
+.gate-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.gate-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  max-width: 460px;
+  width: 90%;
+  text-align: center;
+}
+.gate-modal h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--cyan), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 4px;
+}
+.gate-modal .subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+.gate-modal label {
+  display: block;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.gate-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 12px 14px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  margin-bottom: 6px;
+}
+.gate-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.gate-input::placeholder { color: var(--text-muted); }
+.gate-error {
+  font-size: 0.75rem;
+  color: var(--red);
+  min-height: 20px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+.gate-toggle-label {
+  display: block;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.gate-toggle-container {
+  display: flex;
+  gap: 0;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 3px;
+  margin-bottom: 24px;
+}
+.gate-toggle-btn {
+  flex: 1;
+  padding: 8px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 16px;
+  transition: all 0.25s;
+}
+.gate-toggle-btn.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+.gate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gate-start-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.gate-start-btn:hover { background: #6600bd; }
+.gate-load-btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.gate-load-btn:hover { border-color: var(--accent); color: var(--text); }
+.gate-divider {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── App Wrapper ── */
+.app-wrapper {
+  display: none;
+}
+.app-wrapper.visible {
+  display: block;
+}
 
 /* ── Header ── */
 .header {
@@ -86,22 +237,19 @@ body {
   gap: 12px;
   flex-wrap: wrap;
 }
-.customer-input {
+.customer-display {
+  font-size: 0.85rem;
+  color: var(--cyan);
+  font-weight: 600;
+  padding: 8px 12px;
   background: var(--bg-input);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  color: var(--text);
-  padding: 8px 12px;
-  font-size: 0.85rem;
-  width: 220px;
-  transition: border-color 0.2s;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.customer-input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
-}
-.customer-input::placeholder { color: var(--text-muted); }
 
 /* ── Toggle Switch ── */
 .toggle-container {
@@ -148,8 +296,13 @@ body {
 .btn:hover { border-color: var(--accent); background: var(--bg-card-hover); }
 .btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn-accent:hover { background: #6600bd; }
+.btn-green { background: var(--green); border-color: var(--green); color: #fff; }
+.btn-green:hover { background: #0d9668; }
 .btn-danger { border-color: var(--red); color: var(--red); }
 .btn-danger:hover { background: rgba(239, 68, 68, 0.1); }
+
+/* ── Hidden file input ── */
+.hidden-input { display: none; }
 
 /* ── Save Indicator ── */
 .save-indicator {
@@ -485,9 +638,10 @@ select.question-input {
 @media (max-width: 768px) {
   .header-top { flex-direction: column; align-items: stretch; }
   .header-controls { flex-wrap: wrap; }
-  .customer-input { width: 100%; }
+  .customer-display { max-width: 100%; }
   .summary-bar { grid-template-columns: repeat(2, 1fr); }
   .expand-row { flex-direction: column; gap: 4px; }
+  .gate-modal { padding: 24px; }
 }
 @media (max-width: 480px) {
   .summary-bar { grid-template-columns: 1fr; }
@@ -499,19 +653,47 @@ select.question-input {
 </head>
 <body>
 
+<!-- ── Gate Modal ── -->
+<div class="gate-overlay" id="gateOverlay">
+  <div class="gate-modal">
+    <h2>ITAM ICQ</h2>
+    <div class="subtitle">Implementation &amp; Configuration Questionnaire</div>
+    <label for="gateCustomerName">Customer Name</label>
+    <input type="text" class="gate-input" id="gateCustomerName" placeholder="Enter customer name to begin..." autofocus />
+    <div class="gate-error" id="gateError"></div>
+    <div class="gate-toggle-label">Deployment Type</div>
+    <div class="gate-toggle-container">
+      <button class="gate-toggle-btn active" data-gmode="onprem" onclick="setGateMode('onprem')">On-Prem</button>
+      <button class="gate-toggle-btn" data-gmode="saas" onclick="setGateMode('saas')">SaaS</button>
+    </div>
+    <div class="gate-actions">
+      <button class="gate-start-btn" onclick="startICQ()">Start Questionnaire</button>
+      <div class="gate-divider">or</div>
+      <button class="gate-load-btn" onclick="document.getElementById('gateLoadFile').click()">Load Saved Progress</button>
+      <input type="file" class="hidden-input" id="gateLoadFile" accept=".json" onchange="loadProgressFile(this, true)" />
+    </div>
+  </div>
+</div>
+
+<!-- ── App Wrapper ── -->
+<div class="app-wrapper" id="appWrapper">
+
 <!-- ── Header ── -->
 <div class="header">
   <div class="header-top">
     <div class="header-brand">
-      <h1>Certero ICQ Portal</h1>
-      <span class="version">v1.0</span>
+      <h1>ITAM ICQ</h1>
+      <span class="version">v2.0</span>
     </div>
     <div class="header-controls">
-      <input type="text" class="customer-input" id="customerName" placeholder="Customer name..." />
+      <span class="customer-display" id="customerDisplay"></span>
       <div class="toggle-container">
         <button class="toggle-btn active" data-mode="onprem" onclick="setMode('onprem')">On-Prem</button>
         <button class="toggle-btn" data-mode="saas" onclick="setMode('saas')">SaaS</button>
       </div>
+      <button class="btn btn-green" onclick="saveProgress()">&#x1f4be; Save Progress</button>
+      <button class="btn" onclick="document.getElementById('loadFileInput').click()">Load</button>
+      <input type="file" class="hidden-input" id="loadFileInput" accept=".json" onchange="loadProgressFile(this, false)" />
       <button class="btn btn-accent" onclick="exportJSON()">&#x2913; Export</button>
       <button class="btn btn-danger" onclick="showResetModal()">Reset</button>
       <span class="save-indicator" id="saveIndicator">Saved</span>
@@ -567,14 +749,16 @@ select.question-input {
   </div>
 </div>
 
+</div><!-- /app-wrapper -->
+
 <script>
 /* ═══════════════════════════════════════════════
    ICQ DATA - All sections and questions
    ═══════════════════════════════════════════════ */
 const ICQ_DATA = {
   meta: {
-    title: "Certero Implementation & Configuration Questionnaire",
-    version: "1.0",
+    title: "ITAM Implementation & Configuration Questionnaire",
+    version: "2.0",
     lastUpdated: "2026-02-13"
   },
   sections: [
@@ -935,6 +1119,7 @@ const ICQ_DATA = {
    APPLICATION STATE
    ═══════════════════════════════════════════════ */
 const STORAGE_KEY = 'icq_portal_data';
+let gateMode = 'onprem';
 let state = {
   templateMode: 'onprem',
   customerName: '',
@@ -950,10 +1135,55 @@ let saveTimeout = null;
    ═══════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
-  applyState();
+  // If we have a saved customer name, bypass the gate
+  if (state.customerName && state.customerName.trim()) {
+    passGate();
+  }
+  // Enter key on gate input triggers start
+  document.getElementById('gateCustomerName').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') startICQ();
+  });
+});
+
+/* ═══════════════════════════════════════════════
+   GATE LOGIC
+   ═══════════════════════════════════════════════ */
+function setGateMode(mode) {
+  gateMode = mode;
+  document.querySelectorAll('.gate-toggle-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.gmode === mode);
+  });
+}
+
+function startICQ() {
+  const nameInput = document.getElementById('gateCustomerName');
+  const name = nameInput.value.trim();
+  if (!name) {
+    document.getElementById('gateError').textContent = 'Please enter a customer name to continue.';
+    nameInput.focus();
+    return;
+  }
+  document.getElementById('gateError').textContent = '';
+  state.customerName = name;
+  state.templateMode = gateMode;
+  saveNow();
+  passGate();
+}
+
+function passGate() {
+  document.getElementById('gateOverlay').classList.add('hidden');
+  document.getElementById('appWrapper').classList.add('visible');
+  document.getElementById('customerDisplay').textContent = state.customerName;
+  // Sync header toggle with state
+  document.querySelectorAll('.toggle-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.mode === state.templateMode);
+  });
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === state.activeTab);
+  });
   renderICQ();
   updateStats();
-});
+}
 
 /* ═══════════════════════════════════════════════
    STATE MANAGEMENT
@@ -979,29 +1209,89 @@ function loadState() {
 function saveState() {
   clearTimeout(saveTimeout);
   saveTimeout = setTimeout(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      showSaveIndicator();
-    } catch (e) {
-      console.warn('Failed to save state:', e);
-    }
+    saveNow();
   }, 300);
 }
 
-function applyState() {
-  document.getElementById('customerName').value = state.customerName;
-  document.querySelectorAll('.toggle-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === state.templateMode);
-  });
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tab === state.activeTab);
-  });
+function saveNow() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    showSaveIndicator();
+  } catch (e) {
+    console.warn('Failed to save state:', e);
+  }
 }
 
 function showSaveIndicator() {
   const el = document.getElementById('saveIndicator');
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 1500);
+  if (el) {
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 1500);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   SAVE / LOAD PROGRESS FILES
+   ═══════════════════════════════════════════════ */
+function saveProgress() {
+  const data = {
+    _type: 'icq-progress',
+    _version: '2.0',
+    savedAt: new Date().toISOString(),
+    customerName: state.customerName,
+    templateMode: state.templateMode,
+    responses: state.responses,
+    sectionsInScope: state.sectionsInScope,
+    sectionsCollapsed: state.sectionsCollapsed,
+    activeTab: state.activeTab
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const customerSlug = (state.customerName || 'unnamed').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  a.href = url;
+  a.download = `ICQ-Progress-${customerSlug}-${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function loadProgressFile(input, fromGate) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data._type !== 'icq-progress') {
+        alert('Invalid file. Please select an ICQ progress file.');
+        return;
+      }
+      // Restore state
+      state.customerName = data.customerName || '';
+      state.templateMode = data.templateMode || 'onprem';
+      state.responses = data.responses || {};
+      state.sectionsInScope = data.sectionsInScope || {};
+      state.sectionsCollapsed = data.sectionsCollapsed || {};
+      state.activeTab = data.activeTab || 'full';
+      // Re-initialize any missing scope defaults
+      ICQ_DATA.sections.forEach(s => {
+        if (s.conditional && state.sectionsInScope[s.id] === undefined) {
+          state.sectionsInScope[s.id] = true;
+        }
+      });
+      saveNow();
+      if (!state.customerName.trim()) {
+        alert('Progress file has no customer name. Please enter a customer name.');
+        return;
+      }
+      passGate();
+    } catch (err) {
+      alert('Failed to read progress file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  // Reset file input so same file can be re-selected
+  input.value = '';
 }
 
 /* ═══════════════════════════════════════════════
@@ -1164,11 +1454,6 @@ function handleInput(el) {
   updateStats();
 }
 
-document.getElementById('customerName').addEventListener('input', function() {
-  state.customerName = this.value;
-  saveState();
-});
-
 function setMode(mode) {
   state.templateMode = mode;
   document.querySelectorAll('.toggle-btn').forEach(btn => {
@@ -1214,7 +1499,6 @@ function toggleExpand(id) {
    ═══════════════════════════════════════════════ */
 function updateStats() {
   const mode = state.templateMode;
-  const isNewTab = state.activeTab === 'new';
   let total = 0, answered = 0, totalNew = 0;
 
   ICQ_DATA.sections.forEach(section => {
@@ -1313,10 +1597,16 @@ function doReset() {
   ICQ_DATA.sections.forEach(s => {
     if (s.conditional) state.sectionsInScope[s.id] = true;
   });
-  applyState();
-  renderICQ();
-  updateStats();
   hideResetModal();
+  // Return to gate
+  document.getElementById('appWrapper').classList.remove('visible');
+  document.getElementById('gateOverlay').classList.remove('hidden');
+  document.getElementById('gateCustomerName').value = '';
+  document.getElementById('gateError').textContent = '';
+  gateMode = 'onprem';
+  document.querySelectorAll('.gate-toggle-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.gmode === 'onprem');
+  });
 }
 
 /* ═══════════════════════════════════════════════
