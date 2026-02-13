@@ -315,31 +315,40 @@ body {
 }
 .save-indicator.show { opacity: 1; }
 
+/* ── Sticky Stats ── */
+.sticky-stats {
+  position: sticky;
+  z-index: 90;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+}
+
 /* ── Summary Cards ── */
 .summary-bar {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
-  padding: 16px 24px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 10px 24px;
   max-width: 1200px;
   margin: 0 auto;
 }
 .summary-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 16px;
+  border-radius: var(--radius);
+  padding: 8px 12px;
   text-align: center;
 }
 .summary-card .label {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 1px;
   color: var(--text-muted);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 .summary-card .value {
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   font-weight: 700;
 }
 .summary-card .value.cyan { color: var(--cyan); }
@@ -351,7 +360,7 @@ body {
 .progress-bar-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px 12px;
+  padding: 0 24px 8px;
 }
 .progress-bar-header {
   display: flex;
@@ -388,10 +397,9 @@ body {
 .tabs-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px 16px;
+  padding: 0 24px 8px;
   display: flex;
   gap: 4px;
-  border-bottom: 1px solid var(--border);
 }
 .tab-btn {
   padding: 10px 20px;
@@ -460,6 +468,10 @@ body {
   cursor: pointer;
   user-select: none;
   transition: background 0.2s;
+  position: sticky;
+  z-index: 80;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 .section-header:hover { background: var(--bg-card-hover); }
 .section-header-left {
@@ -844,6 +856,9 @@ select.question-input {
   </div>
 </div>
 
+<!-- ── Sticky Stats ── -->
+<div class="sticky-stats" id="stickyStats">
+
 <!-- ── Summary Cards ── -->
 <div class="summary-bar">
   <div class="summary-card">
@@ -880,6 +895,8 @@ select.question-input {
   <button class="tab-btn active" data-tab="full" onclick="setTab('full')">Full ICQ <span class="badge" id="tabFullCount">0</span></button>
   <button class="tab-btn" data-tab="new" onclick="setTab('new')">New Questions <span class="badge" id="tabNewCount">0</span></button>
 </div>
+
+</div><!-- /sticky-stats -->
 
 <!-- ── Main Content ── -->
 <div class="main-content" id="mainContent"></div>
@@ -1370,7 +1387,22 @@ function passGate() {
   });
   renderICQ();
   updateStats();
+  updateStickyOffsets();
 }
+
+function updateStickyOffsets() {
+  const header = document.querySelector('.header');
+  const stats = document.getElementById('stickyStats');
+  if (!header || !stats) return;
+  const headerH = header.offsetHeight;
+  stats.style.top = headerH + 'px';
+  const stickyBottom = headerH + stats.offsetHeight;
+  document.querySelectorAll('.section-header').forEach(sh => {
+    sh.style.top = stickyBottom + 'px';
+  });
+}
+
+window.addEventListener('resize', updateStickyOffsets);
 
 /* ═══════════════════════════════════════════════
    STATE MANAGEMENT
@@ -1534,6 +1566,9 @@ function renderICQ() {
 
   renderGroup('About You', aboutYou);
   renderGroup('About the Solution', aboutSolution);
+
+  // Update sticky offsets for new section headers
+  requestAnimationFrame(updateStickyOffsets);
 }
 
 function renderSection(section, mode, isNewTab) {
