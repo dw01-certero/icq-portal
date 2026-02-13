@@ -353,16 +353,34 @@ body {
   margin: 0 auto;
   padding: 0 24px 12px;
 }
+.progress-bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.progress-bar-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.progress-bar-percent {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--accent);
+}
 .progress-bar-outer {
-  height: 6px;
+  height: 8px;
   background: var(--bg-input);
-  border-radius: 3px;
+  border-radius: 4px;
   overflow: hidden;
 }
 .progress-bar-fill {
   height: 100%;
   background: var(--gradient-brand);
-  border-radius: 3px;
+  border-radius: 4px;
   transition: width 0.4s ease;
 }
 
@@ -810,6 +828,10 @@ select.question-input {
 
 <!-- ── Progress Bar ── -->
 <div class="progress-bar-container">
+  <div class="progress-bar-header">
+    <span class="progress-bar-label">Overall Progress</span>
+    <span class="progress-bar-percent" id="progressBarPercent">0%</span>
+  </div>
   <div class="progress-bar-outer">
     <div class="progress-bar-fill" id="progressBarFill" style="width:0%"></div>
   </div>
@@ -864,6 +886,18 @@ const ICQ_DATA = {
   sections: [
     /* ─── 6.x ABOUT YOU ─── */
     {
+      id: "6.0", title: "Environment Overview", category: "about-you",
+      scope: "both", conditional: false,
+      questions: [
+        { ref: "6.0.1", text: "How would you describe the overall complexity of your IT environment?", whyRelevant: "Helps us gauge the level of effort and expertise required for a successful implementation.", exampleResponse: "Complex", scope: "both", isNew: true, inputType: "select", options: ["Simple — single site, under 1,000 devices, one OS type", "Moderate — 2–5 sites, 1,000–10,000 devices, a few OS types", "Complex — 6–20 sites, 10,000–50,000 devices, mixed OS and cloud", "Very Complex — 20+ sites/countries, 50,000+ devices, multiple BUs and outsourced IT"] },
+        { ref: "6.0.2", text: "How many total devices (servers, workstations, virtual machines) are approximately in scope?", whyRelevant: "Determines solution sizing, licensing tier, and infrastructure requirements.", exampleResponse: "10,001–50,000", scope: "both", isNew: true, inputType: "select", options: ["Under 1,000", "1,000–5,000", "5,001–10,000", "10,001–50,000", "50,001–100,000", "Over 100,000"] },
+        { ref: "6.0.3", text: "How many countries or regions does your IT infrastructure span?", whyRelevant: "Multi-region deployments add complexity around time zones, network topology, and data sovereignty.", exampleResponse: "6–20 countries", scope: "both", isNew: true, inputType: "select", options: ["1 country", "2–5 countries", "6–20 countries", "Over 20 countries"] },
+        { ref: "6.0.4", text: "How mature is your current IT Asset Management practice?", whyRelevant: "Understanding maturity helps tailor the implementation approach, training requirements, and expected timeline.", exampleResponse: "Intermediate", scope: "both", isNew: true, inputType: "select", options: ["No formal ITAM — no dedicated process or tools", "Basic — spreadsheets or manual tracking only", "Intermediate — some tooling in place but gaps remain", "Advanced — dedicated ITAM tool with established processes"] },
+        { ref: "6.0.5", text: "Do you have any upcoming vendor audits or licence compliance deadlines?", whyRelevant: "Audit timelines often drive implementation priority and urgency.", exampleResponse: "Yes, within the next 6 months", scope: "both", isNew: true, inputType: "select", options: ["No", "Yes, within the next 3 months", "Yes, within the next 6 months", "Yes, within the next 12 months", "Unsure"] },
+        { ref: "6.0.6", text: "How many separate IT teams or managed service providers will need to be coordinated for this project?", whyRelevant: "Multiple teams increase coordination complexity and can impact project timelines.", exampleResponse: "3–5 teams", scope: "both", isNew: true, inputType: "select", options: ["1 (single central IT team)", "2–3 teams", "4–6 teams", "7+ teams or MSPs"] }
+      ]
+    },
+    {
       id: "6.1", title: "Organizational Structure", category: "about-you",
       scope: "both", conditional: false,
       questions: [
@@ -883,9 +917,9 @@ const ICQ_DATA = {
         { ref: "6.2.4", text: "Target number of Windows Workstations?", whyRelevant: "To provide a common understanding of the number of devices in your IT estate.", exampleResponse: "27,575", scope: "both", isNew: false, inputType: "text" },
         { ref: "6.2.5", text: "Please provide a technical contact for Windows Workstations.", whyRelevant: "Someone who understands how workstations are managed within your estate.", exampleResponse: "John Smith, Desktop Administrator, john.smith@anyco.com", scope: "both", isNew: false, inputType: "textarea" },
         { ref: "6.2.6", text: "Certero would typically use the capability within the solution to deploy the Client Agent. Please confirm this is acceptable or if you prefer to use another 3rd party tool for agent deployment.", whyRelevant: "To understand how you intend to deploy the Certero Client agent - using the inbuilt capability of Certero, or using a 3rd party tool such as SCCM.", exampleResponse: "Using Certero is acceptable", scope: "both", isNew: false, inputType: "textarea" },
-        { ref: "6.2.7", text: "Do you use VDI for workstations?", whyRelevant: "To provide an understanding of your desktop infrastructure.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "text" },
-        { ref: "6.2.8", text: "If you use VDI, do you have persistent or non-persistent VDI?", whyRelevant: "To provide an understanding of your desktop infrastructure.", exampleResponse: "Persistent", scope: "both", isNew: false, inputType: "text" },
-        { ref: "6.2.9", text: "Do you use any Thin Client devices?", whyRelevant: "To provide an understanding of your desktop infrastructure.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "text" },
+        { ref: "6.2.7", text: "Do you use VDI for workstations?", whyRelevant: "To provide an understanding of your desktop infrastructure.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No"] },
+        { ref: "6.2.8", text: "If you use VDI, do you have persistent or non-persistent VDI?", whyRelevant: "To provide an understanding of your desktop infrastructure.", exampleResponse: "Persistent", scope: "both", isNew: false, inputType: "select", options: ["Persistent", "Non-persistent", "Both"] },
+        { ref: "6.2.9", text: "Do you use any Thin Client devices?", whyRelevant: "To provide an understanding of your desktop infrastructure.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No"] },
         { ref: "6.2.10", text: "If you use Thin Client devices, how many do you have and what are their manufacturers?", whyRelevant: "To provide an understanding of your desktop infrastructure.", exampleResponse: "350 x Wyse, 100 x HP", scope: "both", isNew: false, inputType: "textarea" },
         { ref: "6.2.11", text: "Do you have any internet-based devices that are in scope of the solution?", whyRelevant: "The solution can have a specific Endpoint Server to capture any devices such as remote or mobile workers that connect over the internet.", exampleResponse: "Yes, AWS and Azure are in scope of this engagement.", scope: "both", isNew: false, inputType: "textarea" },
         { ref: "6.2.12", text: "How many Linux systems do you have?", whyRelevant: "To provide a common understanding of the number & type of devices you have.", exampleResponse: "1,320", scope: "both", isNew: false, inputType: "text" },
@@ -900,7 +934,7 @@ const ICQ_DATA = {
         { ref: "6.2.21", text: "How many AIX systems do you have?", whyRelevant: "To provide a common understanding of the number & type of devices you have.", exampleResponse: "42", scope: "both", isNew: false, inputType: "text" },
         { ref: "6.2.22", text: "Please provide a technical contact for AIX systems.", whyRelevant: "Someone who understands how AIX systems are managed within your estate.", exampleResponse: "John Smith, IBM Server Administrator, john.smith@anyco.com", scope: "both", isNew: false, inputType: "textarea" },
         { ref: "6.2.23", text: "Please provide the FQDN & IP address of a sample AIX system that will be used to confirm inventory operability.", whyRelevant: "This system will be used to confirm the inventory capability of the solution is fully operational on this type of system.", exampleResponse: "aixserv01.anyco.local / 192.168.20.4", scope: "both", isNew: false, inputType: "text" },
-        { ref: "6.2.24", text: "For any non-Windows systems, are you able to provide an RSA key for authentication?", whyRelevant: "RSA key-based authentication is the most efficient method of obtaining inventory of non-Windows based systems.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "text" },
+        { ref: "6.2.24", text: "For any non-Windows systems, are you able to provide an RSA key for authentication?", whyRelevant: "RSA key-based authentication is the most efficient method of obtaining inventory of non-Windows based systems.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No", "Not applicable"] },
         { ref: "6.2.25", text: "How many macOS systems do you have?", whyRelevant: "To provide a common understanding of the number & type of devices you have.", exampleResponse: "250", scope: "both", isNew: false, inputType: "text" },
         { ref: "6.2.26", text: "Please provide a technical contact for macOS systems.", whyRelevant: "Someone who understands how macOS systems are managed within your estate.", exampleResponse: "John Appleseed, Apple System Administrator, john.appleseed@anyco.com", scope: "both", isNew: false, inputType: "textarea" },
         { ref: "6.2.27", text: "Please provide the FQDN & IP address of a sample macOS system that will be used to confirm inventory operability.", whyRelevant: "This system will be used to confirm the inventory capability of the solution is fully operational on this type of system.", exampleResponse: "macos01.anyco.local / 192.168.20.5", scope: "both", isNew: false, inputType: "text" }
@@ -911,7 +945,7 @@ const ICQ_DATA = {
       scope: "both", conditional: false,
       questions: [
         { ref: "6.3.1", text: "For each Active Directory domain, please provide:\n- Active Directory Domain Name (NetBIOS Name)\n- DNS Domain Name\n- Two Domain Controllers\n\nWe will require an Active Directory (AD) user account for each AD domain.", whyRelevant: "Active Directory connectors are needed for each domain to discover and inventory computers and users.", exampleResponse: "Domain Name: JONES\nDNS Domain: jones.local\nControllers: J-DC01, J-DC02\n\nDomain Name: APPLESEED\nDNS Domain: appleseed.com\nControllers: A-DC01, A-DC02", scope: "both", isNew: false, inputType: "textarea" },
-        { ref: "6.3.2", text: "Do you use Azure Active Directory (Entra ID) in addition to on-premises Active Directory?", whyRelevant: "Azure AD / Entra ID connectivity enables cloud-based user and device discovery.", exampleResponse: "Yes, we use Azure AD with hybrid join.", scope: "both", isNew: true, inputType: "textarea" },
+        { ref: "6.3.2", text: "Do you use Azure Active Directory (Entra ID) in addition to on-premises Active Directory?", whyRelevant: "Azure AD / Entra ID connectivity enables cloud-based user and device discovery.", exampleResponse: "Yes, we use Azure AD with hybrid join.", scope: "both", isNew: true, inputType: "select", options: ["Yes, with hybrid join", "Yes, cloud-only", "No", "Unsure"] },
         { ref: "6.3.3", text: "If using Azure AD, please provide the Tenant ID and primary domain.", whyRelevant: "Required to configure the Azure AD connector for user and device synchronization.", exampleResponse: "Tenant ID: bf5c98bb-bc86-4550-bbe1-d3c3629b01dc\nPrimary domain: anyco.onmicrosoft.com", scope: "both", isNew: true, inputType: "textarea" }
       ]
     },
@@ -919,10 +953,10 @@ const ICQ_DATA = {
       id: "6.4", title: "Email", category: "about-you",
       scope: "both", conditional: false,
       questions: [
-        { ref: "6.4.1", text: "Do you use Office 365 for mail?", whyRelevant: "Will feed into the solution design and any required prerequisites.", exampleResponse: "No", scope: "both", isNew: false, inputType: "text" },
-        { ref: "6.4.2", text: "Do you have any on-premise Exchange server infrastructure?", whyRelevant: "Will feed into the solution design and any required prerequisites.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "text" },
+        { ref: "6.4.1", text: "Do you use Office 365 for mail?", whyRelevant: "Will feed into the solution design and any required prerequisites.", exampleResponse: "No", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No"] },
+        { ref: "6.4.2", text: "Do you have any on-premise Exchange server infrastructure?", whyRelevant: "Will feed into the solution design and any required prerequisites.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No"] },
         { ref: "6.4.3", text: "If you have an on-premise Exchange server, please provide the server name.", whyRelevant: "This will be used to help create a connector to your Exchange server.", exampleResponse: "ex01.anyco.local", scope: "both", isNew: false, inputType: "text" },
-        { ref: "6.4.4", text: "If you have an on-premise Exchange server, please confirm the Exchange Server has an Information Store.", whyRelevant: "This is required for the connector to function correctly.", exampleResponse: "Yes, it has been configured with access to an Information Store.", scope: "both", isNew: false, inputType: "text" }
+        { ref: "6.4.4", text: "If you have an on-premise Exchange server, please confirm the Exchange Server has an Information Store.", whyRelevant: "This is required for the connector to function correctly.", exampleResponse: "Yes, it has been configured with access to an Information Store.", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No", "Not applicable"] }
       ]
     },
     {
@@ -953,7 +987,7 @@ const ICQ_DATA = {
       id: "6.7", title: "Information Security", category: "about-you",
       scope: "both", conditional: false,
       questions: [
-        { ref: "6.7.1", text: "Do you have any legacy Windows Servers & Desktops? (Windows 2003, XP, 2008, 2003)", whyRelevant: "These legacy systems impact the SSL Certificate requirement. Checking your Active Directory for older legacy Windows systems will help answer this question.", exampleResponse: "No", scope: "both", isNew: false, inputType: "text" },
+        { ref: "6.7.1", text: "Do you have any legacy Windows Servers & Desktops? (Windows 2003, XP, 2008, 2003)", whyRelevant: "These legacy systems impact the SSL Certificate requirement. Checking your Active Directory for older legacy Windows systems will help answer this question.", exampleResponse: "No", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No", "Unknown"] },
         { ref: "6.7.2", text: "Please confirm you are able to provide SSL Certificates.", whyRelevant: "Without valid SSL Certificates, the solution will not be able to securely communicate over HTTPS.", exampleResponse: "Yes, certificates are issued by our internal CA.", scope: "both", isNew: false, inputType: "textarea" }
       ]
     },
@@ -973,7 +1007,7 @@ const ICQ_DATA = {
       questions: [
         { ref: "6.9.1", text: "Will you be assigning a Project Manager to the Implementation and Configuration and if so, can you provide their contact details?", whyRelevant: "So we know if you will have a Project Manager in place and who to liaise with.", exampleResponse: "John Smith, Project Manager, john.smith@anyco.com, Tel: (555) 123 4567", scope: "both", isNew: false, inputType: "textarea" },
         { ref: "6.9.2", text: "Please provide an escalation point for the project.", whyRelevant: "If any issues need escalating, we will have a contact for communication.", exampleResponse: "John Smith, Program Manager, john.smith@anyco.com", scope: "both", isNew: false, inputType: "textarea" },
-        { ref: "6.9.3", text: "Will any members of the Certero delivery team need to go through any security clearance processes before starting the project?", whyRelevant: "To understand if this will be a prerequisite before activities can commence.", exampleResponse: "No special security clearances required", scope: "both", isNew: false, inputType: "text" },
+        { ref: "6.9.3", text: "Will any members of the Certero delivery team need to go through any security clearance processes before starting the project?", whyRelevant: "To understand if this will be a prerequisite before activities can commence.", exampleResponse: "No special security clearances required", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No", "Unsure"] },
         { ref: "6.9.4", text: "What is the lead time for a change request to be approved?", whyRelevant: "So this can be factored into the planning.", exampleResponse: "7 days", scope: "both", isNew: false, inputType: "text" },
         { ref: "6.9.5", text: "Which day of the week is the deadline for submitting change requests?", whyRelevant: "So this can be factored into the planning.", exampleResponse: "Wednesday of each week", scope: "both", isNew: false, inputType: "text" },
         { ref: "6.9.6", text: "When are your planned change freeze dates?", whyRelevant: "So this can be factored into the planning.", exampleResponse: "Public Holiday: 25-Jun-2025\nEaster\nChristmas period (Dec 20 - Jan 2)", scope: "both", isNew: false, inputType: "textarea" },
@@ -987,7 +1021,7 @@ const ICQ_DATA = {
         { ref: "6.9.14", text: "The solution has the ability to highlight 'expired' computers, which are those not seen by the solution after a number of days - how many days should this be?", whyRelevant: "To be used during the configuration of the solution.", exampleResponse: "30 days", scope: "both", isNew: false, inputType: "text" },
         { ref: "6.9.15", text: "The solution has the ability to auto-archive computers not seen by the solution after a pre-defined number of days - how many days should this be?", whyRelevant: "To be used during the configuration of the solution.", exampleResponse: "90 days", scope: "both", isNew: false, inputType: "text" },
         { ref: "6.9.16", text: "Who do you see as being the main user(s) of the solution? For each, provide their full name, their role and the login username to be used.", whyRelevant: "This will help with the setting up of the initial users of the solution.", exampleResponse: "John Smith, Software Asset Manager, jsmith01\nJohn Appleseed, Desktop Engineer, jappleseed02", scope: "both", isNew: false, inputType: "textarea" },
-        { ref: "6.9.17", text: "For the main solution users identified above, they can be authenticated by:\n- Local account within the solution\n- Via an on-premise Active Directory\n- Via Azure Active Directory\n- Via Federated Active Directory\nWhich method do you wish to use?", whyRelevant: "This will help with the setting up of the initial users of the solution.", exampleResponse: "Azure Active Directory", scope: "both", isNew: false, inputType: "text" }
+        { ref: "6.9.17", text: "For the main solution users identified above, which authentication method do you wish to use?", whyRelevant: "This will help with the setting up of the initial users of the solution.", exampleResponse: "Azure Active Directory", scope: "both", isNew: false, inputType: "select", options: ["Local account within the solution", "On-premise Active Directory", "Azure Active Directory", "Federated Active Directory"] }
       ]
     },
 
@@ -1008,9 +1042,9 @@ const ICQ_DATA = {
       scope: "onprem", conditional: false,
       questions: [
         { ref: "7.2.1", text: "The Database uses Microsoft SQL Server. The supported versions are Microsoft SQL Server 2016 or greater, Standard or Enterprise Edition. What version and edition of Microsoft SQL Server will be used?", whyRelevant: "Will be incorporated into the solution design and any related prerequisites.", exampleResponse: "2019 Standard Edition", scope: "onprem", isNew: false, inputType: "text" },
-        { ref: "7.2.2", text: "Certero recommends that a dedicated instance of SQL Server is used to support Certero. Will the SQL Server be a shared or dedicated instance?", whyRelevant: "Will be incorporated into the solution design and any related prerequisites.", exampleResponse: "Dedicated", scope: "onprem", isNew: false, inputType: "text" },
+        { ref: "7.2.2", text: "Certero recommends that a dedicated instance of SQL Server is used to support Certero. Will the SQL Server be a shared or dedicated instance?", whyRelevant: "Will be incorporated into the solution design and any related prerequisites.", exampleResponse: "Dedicated", scope: "onprem", isNew: false, inputType: "select", options: ["Dedicated (recommended)", "Shared"] },
         { ref: "7.2.3", text: "SQL Server and the Application Server must be members of the same Active Directory Domain. Which domain will this be?", whyRelevant: "To ensure the two solution components can communicate.", exampleResponse: "Both will be on AD domain ANYCO", scope: "onprem", isNew: false, inputType: "text" },
-        { ref: "7.2.4", text: "For SQL Server will you use a Default Instance, or a Named Instance?", whyRelevant: "Will be incorporated into the solution design and any related prerequisites.", exampleResponse: "Named Instance", scope: "onprem", isNew: false, inputType: "text" },
+        { ref: "7.2.4", text: "For SQL Server will you use a Default Instance, or a Named Instance?", whyRelevant: "Will be incorporated into the solution design and any related prerequisites.", exampleResponse: "Named Instance", scope: "onprem", isNew: false, inputType: "select", options: ["Default Instance", "Named Instance"] },
         { ref: "7.2.5", text: "If you use a Named Instance, then please confirm the dynamic port range that will be used.", whyRelevant: "SQL Server may be configured to use Dynamic Ports. If this is the case, a range of ports will need to be opened.", exampleResponse: "Ports 45200 to 45250", scope: "onprem", isNew: false, inputType: "text" }
       ]
     },
@@ -1018,10 +1052,10 @@ const ICQ_DATA = {
       id: "7.3", title: "Certero Client Agent", category: "about-solution",
       scope: "both", conditional: false,
       questions: [
-        { ref: "7.3.1", text: "Please confirm your preference to use agent-based or agentless inventory of your Windows workstations.", whyRelevant: "To help configure inventory within the solution aligned to your preference.", exampleResponse: "Agent-based", scope: "both", isNew: false, inputType: "text" },
-        { ref: "7.3.2", text: "Please confirm your preference to use agent-based or agentless inventory of your Windows servers.", whyRelevant: "To help configure inventory within the solution aligned to your preference.", exampleResponse: "Agentless", scope: "both", isNew: false, inputType: "text" },
-        { ref: "7.3.3", text: "For those computers having the Certero Client Agent installed, it can be configured to show or hide its icon in the system tray area. Do you want this to be shown or hidden to end users?", whyRelevant: "Will be incorporated into the solution design.", exampleResponse: "Show", scope: "both", isNew: false, inputType: "text" },
-        { ref: "7.3.4", text: "The Client Agent has an auto-update capability for ease of on-going operational maintenance. Should this capability be enabled or disabled?", whyRelevant: "Will be incorporated into the solution design.", exampleResponse: "Enable", scope: "both", isNew: false, inputType: "text" },
+        { ref: "7.3.1", text: "Please confirm your preference to use agent-based or agentless inventory of your Windows workstations.", whyRelevant: "To help configure inventory within the solution aligned to your preference.", exampleResponse: "Agent-based", scope: "both", isNew: false, inputType: "select", options: ["Agent-based", "Agentless", "Both"] },
+        { ref: "7.3.2", text: "Please confirm your preference to use agent-based or agentless inventory of your Windows servers.", whyRelevant: "To help configure inventory within the solution aligned to your preference.", exampleResponse: "Agentless", scope: "both", isNew: false, inputType: "select", options: ["Agent-based", "Agentless", "Both"] },
+        { ref: "7.3.3", text: "For those computers having the Certero Client Agent installed, it can be configured to show or hide its icon in the system tray area. Do you want this to be shown or hidden to end users?", whyRelevant: "Will be incorporated into the solution design.", exampleResponse: "Show", scope: "both", isNew: false, inputType: "select", options: ["Show", "Hide"] },
+        { ref: "7.3.4", text: "The Client Agent has an auto-update capability for ease of on-going operational maintenance. Should this capability be enabled or disabled?", whyRelevant: "Will be incorporated into the solution design.", exampleResponse: "Enable", scope: "both", isNew: false, inputType: "select", options: ["Enable", "Disable"] },
         { ref: "7.3.5", text: "The Client Agent can run a small web server on each endpoint computer to help diagnose and troubleshoot issues. Please confirm if this is a capability you wish to enable, and if so, which unique port to use and whether HTTP or HTTPS should be used.", whyRelevant: "This allows users of the solution to look at Certero log files on the computer where the Client Agent is installed and make use of optional plug-in tools.", exampleResponse: "HTTPS, port 27738", scope: "both", isNew: false, inputType: "textarea" },
         { ref: "7.3.6", text: "For this Implementation & Configuration of the solution, the Client Agent will be deployed to a sample of up to 10 workstations. Please provide a list of the FQDNs of these sample workstations.", whyRelevant: "The list of these workstations will be used during the implementation to confirm the operability of the Certero Client Agent.", exampleResponse: "workstation01.anyco.local\nworkstation02.anyco.local\nworkstation03.anyco.local", scope: "both", isNew: false, inputType: "textarea" }
       ]
@@ -1037,9 +1071,9 @@ const ICQ_DATA = {
       id: "7.5", title: "Information Security", category: "about-solution",
       scope: "both", conditional: false,
       questions: [
-        { ref: "7.5.1", text: "Will you be using Anti-Virus software on the Application Server, Database Server and/or Endpoint Server solution components?", whyRelevant: "If Anti-Virus is used, best practice is to add exceptions so as to not impact performance of the solution.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "text" },
-        { ref: "7.5.2", text: "Do you use a proxy server to access the internet?", whyRelevant: "Proxy server details will be required for Certero Provisioning to correctly synchronize with the Customer Centre.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "text" },
-        { ref: "7.5.3", text: "Certero Provisioning on the Application Server can 'pull' updates such as SRDB definitions automatically securely over the internet using HTTPS port 443. This will be enabled by default. Please confirm this is acceptable.", whyRelevant: "To allow Certero Provisioning to communicate with the Certero Customer Center (cc.certero.com) to receive License Activations, download new releases and enable automatic SRDB synchronization.", exampleResponse: "OK", scope: "both", isNew: false, inputType: "text" },
+        { ref: "7.5.1", text: "Will you be using Anti-Virus software on the Application Server, Database Server and/or Endpoint Server solution components?", whyRelevant: "If Anti-Virus is used, best practice is to add exceptions so as to not impact performance of the solution.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No", "Unsure"] },
+        { ref: "7.5.2", text: "Do you use a proxy server to access the internet?", whyRelevant: "Proxy server details will be required for Certero Provisioning to correctly synchronize with the Customer Centre.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No"] },
+        { ref: "7.5.3", text: "Certero Provisioning on the Application Server can 'pull' updates such as SRDB definitions automatically securely over the internet using HTTPS port 443. This will be enabled by default. Please confirm this is acceptable.", whyRelevant: "To allow Certero Provisioning to communicate with the Certero Customer Center (cc.certero.com) to receive License Activations, download new releases and enable automatic SRDB synchronization.", exampleResponse: "OK", scope: "both", isNew: false, inputType: "select", options: ["Yes, acceptable", "No, not acceptable"] },
         { ref: "7.5.4", text: "Within your network, secure HTTPS traffic between solution components uses port 443. If this is not the port you use, which other port should be used for HTTPS?", whyRelevant: "To ensure the secure communication between all solution components over HTTPS.", exampleResponse: "Yes, use port 443", scope: "both", isNew: false, inputType: "text" }
       ]
     },
@@ -1048,10 +1082,10 @@ const ICQ_DATA = {
       scope: "both", conditional: false,
       questions: [
         { ref: "7.6.1", text: "What is the SMTP email relay server name the solution can use?", whyRelevant: "Used to allow the Certero solution to send emails to its users such as reports and automated alerts.", exampleResponse: "smtp.office365.com (Office 365) or smtp01.anyco.com (On-premise)", scope: "both", isNew: false, inputType: "text" },
-        { ref: "7.6.2", text: "The typical ports for an SMTP server will be 587 or 25. Please confirm which port should be used.", whyRelevant: "Used to allow the Certero solution to send emails to its users.", exampleResponse: "Port 587 (Office 365) or Port 25 (On-premise)", scope: "both", isNew: false, inputType: "text" },
-        { ref: "7.6.3", text: "What authentication type is used with the SMTP Email server: Anonymous or Basic?", whyRelevant: "To know which method of authentication is to be used and if credentials are to be provided.", exampleResponse: "Basic", scope: "both", isNew: false, inputType: "text" },
+        { ref: "7.6.2", text: "The typical ports for an SMTP server will be 587 or 25. Please confirm which port should be used.", whyRelevant: "Used to allow the Certero solution to send emails to its users.", exampleResponse: "Port 587 (Office 365) or Port 25 (On-premise)", scope: "both", isNew: false, inputType: "select", options: ["587", "25", "Other"] },
+        { ref: "7.6.3", text: "What authentication type is used with the SMTP Email server: Anonymous or Basic?", whyRelevant: "To know which method of authentication is to be used and if credentials are to be provided.", exampleResponse: "Basic", scope: "both", isNew: false, inputType: "select", options: ["Anonymous", "Basic"] },
         { ref: "7.6.4", text: "For emailed alerts from the solution, confirm the 'sender' email address and the name you wish to use.", whyRelevant: "Emails from the solution will be sent from the sender email address and name provided.", exampleResponse: "noreply@certero.anyco.com, Certero Platform", scope: "both", isNew: false, inputType: "textarea" },
-        { ref: "7.6.5", text: "Does your SMTP email relay server require the sending server to be 'approved' or on a 'whitelist' to allow the solution to make use of it?", whyRelevant: "This may be required before the solution can send emails and alerts using your email infrastructure.", exampleResponse: "Yes, the solution will need to be added to an approved list of senders.", scope: "both", isNew: false, inputType: "text" }
+        { ref: "7.6.5", text: "Does your SMTP email relay server require the sending server to be 'approved' or on a 'whitelist' to allow the solution to make use of it?", whyRelevant: "This may be required before the solution can send emails and alerts using your email infrastructure.", exampleResponse: "Yes, the solution will need to be added to an approved list of senders.", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No", "Unsure"] }
       ]
     },
     {
@@ -1195,7 +1229,7 @@ const ICQ_DATA = {
       id: "7.22", title: "Warranty", category: "about-solution",
       scope: "both", conditional: false,
       questions: [
-        { ref: "7.22.1", text: "Do you wish to make use of the Dell Warranty information automatically collected by the solution?", whyRelevant: "The solution can contact Dell systems over the internet to obtain specific warranty information regarding Dell computers.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "text" },
+        { ref: "7.22.1", text: "Do you wish to make use of the Dell Warranty information automatically collected by the solution?", whyRelevant: "The solution can contact Dell systems over the internet to obtain specific warranty information regarding Dell computers.", exampleResponse: "Yes", scope: "both", isNew: false, inputType: "select", options: ["Yes", "No"] },
         { ref: "7.22.2", text: "If enabling Dell warranty lookups, can you provide a Dell TechDirect API key?", whyRelevant: "Dell requires API credentials for automated warranty lookups. A TechDirect account with API access is needed.", exampleResponse: "Yes, we have a Dell TechDirect account and can generate API credentials", scope: "both", isNew: true, inputType: "textarea" },
         { ref: "7.22.3", text: "Do you wish to enable Lenovo warranty lookups?", whyRelevant: "The solution can also collect warranty data for Lenovo devices via the Lenovo support API.", exampleResponse: "Yes, we have approximately 2,000 Lenovo devices", scope: "both", isNew: true, inputType: "textarea" },
         { ref: "7.22.4", text: "If enabling Lenovo warranty lookups, can you provide Lenovo API credentials?", whyRelevant: "Lenovo warranty lookups require valid API credentials from the Lenovo support portal.", exampleResponse: "Yes, we will request API credentials from Lenovo", scope: "both", isNew: true, inputType: "textarea" }
@@ -1678,6 +1712,7 @@ function updateStats() {
   document.getElementById('statRemaining').textContent = remaining;
   document.getElementById('statProgress').textContent = pct + '%';
   document.getElementById('progressBarFill').style.width = pct + '%';
+  document.getElementById('progressBarPercent').textContent = pct + '%';
   document.getElementById('tabFullCount').textContent = total;
   document.getElementById('tabNewCount').textContent = totalNew;
 }
