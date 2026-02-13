@@ -621,6 +621,74 @@ select.question-input {
   cursor: pointer;
 }
 
+/* ── Audit Modal ── */
+.audit-modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  max-width: 700px;
+  width: 95%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+.audit-modal h3 { margin-bottom: 4px; font-size: 1rem; }
+.audit-modal .audit-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+.audit-table-wrap {
+  overflow-y: auto;
+  flex: 1;
+  margin-bottom: 16px;
+}
+.audit-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+.audit-table th {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+}
+.audit-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: top;
+}
+.audit-table tr:hover td { background: var(--bg-card-hover); }
+.audit-type {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 1px 7px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+.audit-type.login { background: var(--accent); color: #fff; }
+.audit-type.answer { background: var(--green); color: #fff; }
+.audit-type.scope { background: var(--cyan); color: #000; }
+.audit-type.load { background: var(--amber); color: #000; }
+.audit-type.reset { background: var(--red); color: #fff; }
+.audit-type.export { background: var(--text-muted); color: #fff; }
+.audit-empty {
+  text-align: center;
+  padding: 32px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
 /* ── Modal ── */
 .modal-overlay {
   display: none;
@@ -708,6 +776,7 @@ select.question-input {
       <button class="btn btn-green" onclick="saveProgress()">&#x1f4be; Save Progress</button>
       <button class="btn" onclick="document.getElementById('loadFileInput').click()">Load</button>
       <input type="file" class="hidden-input" id="loadFileInput" accept=".json" onchange="loadProgressFile(this, false)" />
+      <button class="btn" onclick="showAuditModal()">Audit Log</button>
       <button class="btn btn-accent" onclick="exportJSON()">&#x2913; Export</button>
       <button class="btn btn-danger" onclick="showResetModal()">Reset</button>
       <span class="save-indicator" id="saveIndicator">Saved</span>
@@ -759,6 +828,19 @@ select.question-input {
     <div class="modal-actions">
       <button class="btn" onclick="hideResetModal()">Cancel</button>
       <button class="btn btn-danger" onclick="doReset()">Reset Everything</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Audit Log Modal ── -->
+<div class="modal-overlay" id="auditModal">
+  <div class="audit-modal">
+    <h3>Audit Log</h3>
+    <div class="audit-subtitle">Tracks logins, answer changes, and actions</div>
+    <div class="audit-table-wrap" id="auditTableWrap"></div>
+    <div class="modal-actions">
+      <button class="btn" onclick="exportAuditLog()">Download CSV</button>
+      <button class="btn" onclick="hideAuditModal()">Close</button>
     </div>
   </div>
 </div>
@@ -1140,7 +1222,8 @@ let state = {
   responses: {},
   sectionsInScope: {},
   sectionsCollapsed: {},
-  activeTab: 'full'
+  activeTab: 'full',
+  auditLog: []
 };
 let saveTimeout = null;
 
@@ -1180,6 +1263,7 @@ function startICQ() {
   document.getElementById('gateError').textContent = '';
   state.customerName = name;
   state.templateMode = gateMode;
+  addAudit('login', 'Logged in as "' + name + '" (' + gateMode + ')');
   saveNow();
   passGate();
 }
@@ -1257,8 +1341,11 @@ function saveProgress() {
     responses: state.responses,
     sectionsInScope: state.sectionsInScope,
     sectionsCollapsed: state.sectionsCollapsed,
-    activeTab: state.activeTab
+    activeTab: state.activeTab,
+    auditLog: state.auditLog
   };
+  addAudit('export', 'Saved progress file');
+  saveNow();
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1287,12 +1374,14 @@ function loadProgressFile(input, fromGate) {
       state.sectionsInScope = data.sectionsInScope || {};
       state.sectionsCollapsed = data.sectionsCollapsed || {};
       state.activeTab = data.activeTab || 'full';
+      state.auditLog = data.auditLog || [];
       // Re-initialize any missing scope defaults
       ICQ_DATA.sections.forEach(s => {
         if (s.conditional && state.sectionsInScope[s.id] === undefined) {
           state.sectionsInScope[s.id] = true;
         }
       });
+      addAudit('load', 'Loaded progress file: ' + file.name);
       saveNow();
       if (!state.customerName.trim()) {
         alert('Progress file has no customer name. Please enter a customer name.');
@@ -1465,7 +1554,20 @@ function renderQuestion(q) {
    ═══════════════════════════════════════════════ */
 function handleInput(el) {
   const ref = el.dataset.ref;
+  const oldVal = state.responses[ref] || '';
   state.responses[ref] = el.value;
+
+  // Audit: log answer changes (debounced via a per-ref timer)
+  clearTimeout(el._auditTimer);
+  el._auditTimer = setTimeout(() => {
+    if (el.value.trim() && el.value !== oldVal) {
+      addAudit('answer', ref + ': answered');
+      saveNow();
+    } else if (!el.value.trim() && oldVal.trim()) {
+      addAudit('answer', ref + ': cleared');
+      saveNow();
+    }
+  }, 1000);
 
   // Update card styling
   const card = el.closest('.question-card');
@@ -1521,6 +1623,7 @@ function toggleScope(sectionId, checked) {
   state.sectionsInScope[sectionId] = checked;
   const el = document.querySelector(`.section[data-section-id="${sectionId}"]`);
   if (el) el.classList.toggle('out-of-scope', !checked);
+  addAudit('scope', sectionId + ': ' + (checked ? 'in scope' : 'out of scope'));
   saveState();
   updateStats();
 }
@@ -1565,6 +1668,8 @@ function updateStats() {
    EXPORT
    ═══════════════════════════════════════════════ */
 function exportJSON() {
+  addAudit('export', 'Exported JSON (' + state.templateMode + ')');
+  saveNow();
   const mode = state.templateMode;
   const exportData = {
     meta: {
@@ -1620,6 +1725,9 @@ function hideResetModal() {
   document.getElementById('resetModal').classList.remove('show');
 }
 function doReset() {
+  addAudit('reset', 'Reset all responses');
+  // Preserve audit log across reset
+  const preservedLog = [...state.auditLog];
   localStorage.removeItem(STORAGE_KEY);
   state = {
     templateMode: 'onprem',
@@ -1627,7 +1735,8 @@ function doReset() {
     responses: {},
     sectionsInScope: {},
     sectionsCollapsed: {},
-    activeTab: 'full'
+    activeTab: 'full',
+    auditLog: preservedLog
   };
   // Re-initialize scope defaults
   ICQ_DATA.sections.forEach(s => {
@@ -1643,6 +1752,59 @@ function doReset() {
   document.querySelectorAll('.gate-toggle-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.gmode === 'onprem');
   });
+}
+
+/* ═══════════════════════════════════════════════
+   AUDIT LOG
+   ═══════════════════════════════════════════════ */
+function addAudit(type, detail) {
+  state.auditLog.push({
+    ts: new Date().toISOString(),
+    user: state.customerName || '(unknown)',
+    type: type,
+    detail: detail
+  });
+}
+
+function showAuditModal() {
+  const wrap = document.getElementById('auditTableWrap');
+  const log = state.auditLog;
+  if (!log.length) {
+    wrap.innerHTML = '<div class="audit-empty">No audit entries yet.</div>';
+  } else {
+    let html = '<table class="audit-table"><thead><tr><th>Timestamp</th><th>User</th><th>Action</th><th>Detail</th></tr></thead><tbody>';
+    // Show newest first
+    for (let i = log.length - 1; i >= 0; i--) {
+      const e = log[i];
+      const time = new Date(e.ts).toLocaleString();
+      html += `<tr><td>${escapeHTML(time)}</td><td>${escapeHTML(e.user)}</td><td><span class="audit-type ${e.type}">${e.type}</span></td><td>${escapeHTML(e.detail)}</td></tr>`;
+    }
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+  }
+  document.getElementById('auditModal').classList.add('show');
+}
+
+function hideAuditModal() {
+  document.getElementById('auditModal').classList.remove('show');
+}
+
+function exportAuditLog() {
+  const log = state.auditLog;
+  if (!log.length) { alert('No audit entries to export.'); return; }
+  const rows = [['Timestamp', 'User', 'Action', 'Detail']];
+  log.forEach(e => {
+    rows.push([e.ts, e.user, e.type, '"' + (e.detail || '').replace(/"/g, '""') + '"']);
+  });
+  const csv = rows.map(r => r.join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const customerSlug = (state.customerName || 'unnamed').replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+  a.href = url;
+  a.download = `ICQ-Audit-${customerSlug}-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 /* ═══════════════════════════════════════════════
