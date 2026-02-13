@@ -740,8 +740,10 @@ select.question-input {
   <div class="gate-modal">
     <h2>ITAM ICQ</h2>
     <div class="subtitle">Implementation &amp; Configuration Questionnaire</div>
-    <label for="gateCustomerName">Customer Name</label>
-    <input type="text" class="gate-input" id="gateCustomerName" placeholder="Enter customer name to begin..." autofocus />
+    <label for="gateUserName">Your Name</label>
+    <input type="text" class="gate-input" id="gateUserName" placeholder="Enter your name..." autofocus />
+    <label for="gateCustomerName" style="margin-top:12px">Customer Name</label>
+    <input type="text" class="gate-input" id="gateCustomerName" placeholder="Enter customer name..." />
     <div class="gate-error" id="gateError"></div>
     <div class="gate-toggle-label">Deployment Type</div>
     <div class="gate-toggle-container">
@@ -1219,6 +1221,7 @@ let gateMode = 'onprem';
 let state = {
   templateMode: 'onprem',
   customerName: '',
+  userName: '',
   responses: {},
   sectionsInScope: {},
   sectionsCollapsed: {},
@@ -1232,11 +1235,14 @@ let saveTimeout = null;
    ═══════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   loadState();
-  // If we have a saved customer name, bypass the gate
-  if (state.customerName && state.customerName.trim()) {
+  // If we have a saved user + customer name, bypass the gate
+  if (state.userName && state.userName.trim() && state.customerName && state.customerName.trim()) {
     passGate();
   }
-  // Enter key on gate input triggers start
+  // Enter key on gate inputs triggers start
+  document.getElementById('gateUserName').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') startICQ();
+  });
   document.getElementById('gateCustomerName').addEventListener('keydown', (e) => {
     if (e.key === 'Enter') startICQ();
   });
@@ -1253,17 +1259,25 @@ function setGateMode(mode) {
 }
 
 function startICQ() {
-  const nameInput = document.getElementById('gateCustomerName');
-  const name = nameInput.value.trim();
-  if (!name) {
+  const userInput = document.getElementById('gateUserName');
+  const custInput = document.getElementById('gateCustomerName');
+  const user = userInput.value.trim();
+  const cust = custInput.value.trim();
+  if (!user) {
+    document.getElementById('gateError').textContent = 'Please enter your name to continue.';
+    userInput.focus();
+    return;
+  }
+  if (!cust) {
     document.getElementById('gateError').textContent = 'Please enter a customer name to continue.';
-    nameInput.focus();
+    custInput.focus();
     return;
   }
   document.getElementById('gateError').textContent = '';
-  state.customerName = name;
+  state.userName = user;
+  state.customerName = cust;
   state.templateMode = gateMode;
-  addAudit('login', 'Logged in as "' + name + '" (' + gateMode + ')');
+  addAudit('login', 'Logged in (' + gateMode + ') for customer "' + cust + '"');
   saveNow();
   passGate();
 }
@@ -1271,7 +1285,7 @@ function startICQ() {
 function passGate() {
   document.getElementById('gateOverlay').classList.add('hidden');
   document.getElementById('appWrapper').classList.add('visible');
-  document.getElementById('customerDisplay').textContent = state.customerName;
+  document.getElementById('customerDisplay').textContent = state.customerName + ' | ' + state.userName;
   // Sync header toggle with state
   document.querySelectorAll('.toggle-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === state.templateMode);
@@ -1336,6 +1350,7 @@ function saveProgress() {
     _type: 'icq-progress',
     _version: '2.0',
     savedAt: new Date().toISOString(),
+    userName: state.userName,
     customerName: state.customerName,
     templateMode: state.templateMode,
     responses: state.responses,
@@ -1368,6 +1383,7 @@ function loadProgressFile(input, fromGate) {
         return;
       }
       // Restore state
+      state.userName = data.userName || '';
       state.customerName = data.customerName || '';
       state.templateMode = data.templateMode || 'onprem';
       state.responses = data.responses || {};
@@ -1732,6 +1748,7 @@ function doReset() {
   state = {
     templateMode: 'onprem',
     customerName: '',
+    userName: '',
     responses: {},
     sectionsInScope: {},
     sectionsCollapsed: {},
@@ -1746,6 +1763,7 @@ function doReset() {
   // Return to gate
   document.getElementById('appWrapper').classList.remove('visible');
   document.getElementById('gateOverlay').classList.remove('hidden');
+  document.getElementById('gateUserName').value = '';
   document.getElementById('gateCustomerName').value = '';
   document.getElementById('gateError').textContent = '';
   gateMode = 'onprem';
@@ -1760,7 +1778,7 @@ function doReset() {
 function addAudit(type, detail) {
   state.auditLog.push({
     ts: new Date().toISOString(),
-    user: state.customerName || '(unknown)',
+    user: state.userName || '(unknown)',
     type: type,
     detail: detail
   });
