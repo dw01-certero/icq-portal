@@ -170,10 +170,21 @@ function Build-CustomerConfig {
     }
     $preJS = $preLines -join ",`n"
 
-    # Build allowedTechs JS (same keys as preSelectedTechs — only show purchased connectors)
+    # Build allowedTechs JS — restrict tech options to only purchased connectors
+    # Always include section entry when the product is purchased (empty array = hide all options)
+    $allowedTechs = @{}
+    if ($Ticket.Products -contains "C4SaaS") {
+        $techKeys = @()
+        foreach ($conn in $Ticket.SaaSConnectors) {
+            if ($saasMapping.ContainsKey($conn)) {
+                $techKeys += $saasMapping[$conn]
+            }
+        }
+        $allowedTechs["2.20"] = $techKeys
+    }
     $allowedLines = @()
-    foreach ($key in $preTechs.Keys) {
-        $vals = ($preTechs[$key] | ForEach-Object { "`"$_`"" }) -join ", "
+    foreach ($key in $allowedTechs.Keys) {
+        $vals = ($allowedTechs[$key] | ForEach-Object { "`"$_`"" }) -join ", "
         $allowedLines += "    `"$key`": [$vals]"
     }
     $allowedJS = $allowedLines -join ",`n"
