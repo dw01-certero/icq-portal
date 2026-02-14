@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ITAM ICQ</title>
+<title>ITAM ICQ - ROMO</title>
 <style>
 /* ── CSS Variables & Theme ── */
 :root {
@@ -905,7 +905,7 @@ select.question-input {
 <div class="header">
   <div class="header-top">
     <div class="header-brand">
-      <h1>ITAM ICQ</h1>
+      <h1>ITAM ICQ &#8212; ROMO</h1>
       <span class="version">v2.0</span>
     </div>
     <div class="header-controls">
@@ -919,7 +919,7 @@ select.question-input {
       <input type="file" class="hidden-input" id="loadFileInput" accept=".json" onchange="loadProgressFile(this, false)" />
       <button class="btn" onclick="showAuditModal()">Audit Log</button>
       <button class="btn btn-accent" onclick="exportJSON()">&#x2913; Export</button>
-      <button class="btn btn-danger" onclick="showResetModal()">Reset</button>
+      <button class="btn btn-danger" onclick="showResetModal()" style="display:none">Reset</button>
       <span class="save-indicator" id="saveIndicator">Saved</span>
     </div>
   </div>
@@ -971,7 +971,12 @@ select.question-input {
 <!-- ── Main Content ── -->
 <div class="main-content" id="mainContent"></div>
 
-<!-- ── Reset Modal ── -->
+<!-- Jira Reference -->
+<div style="text-align:center;padding:12px;font-size:0.7rem;color:var(--text-muted)">
+  Generated from <strong>TMT4-154</strong> | <a href="https://certero.atlassian.net/browse/TMT4-154" style="color:var(--accent)">View in Jira</a>
+</div>
+
+<!-- __ Reset Modal __ -->
 <div class="modal-overlay" id="resetModal">
   <div class="modal">
     <h3>Reset All Responses?</h3>
@@ -1486,7 +1491,24 @@ const ICQ_DATA = {
    APPLICATION STATE
    ═══════════════════════════════════════════════ */
 /* ── Customer Config (injected by generate-customer.ps1 for customer portals) ── */
-/* const CUSTOMER_CONFIG = null; */
+const CUSTOMER_CONFIG = {
+  customerName: "ROMO",
+  userName: "Jordan Wong",
+  templateMode: "onprem",
+  jiraTicket: "TMT4-154",
+  lockedSections: {
+    "1.8": { locked: true, reason: "Not included in your project scope. Contact your account manager or PMO for details." },
+    "2.8": { locked: true, reason: "Not included in your project scope. Contact your account manager or PMO for details." },
+    "2.10": { locked: true, reason: "Not included in your project scope. Contact your account manager or PMO for details." },
+    "2.16": { locked: true, reason: "Not included in your project scope. Contact your account manager or PMO for details." },
+    "2.18": { locked: true, reason: "Not included in your project scope. Contact your account manager or PMO for details." },
+    "2.19": { locked: true, reason: "Not included in your project scope. Contact your account manager or PMO for details." },
+    "2.21": { locked: true, reason: "Not included in your project scope. Contact your account manager or PMO for details." }
+  },
+  preSelectedTechs: {
+    "2.20": ["m365", "adobe_cc", "salesforce"]
+  }
+};
 
 const STORAGE_KEY = 'icq_portal_data';
 let gateMode = 'onprem';

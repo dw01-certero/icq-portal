@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ICQ Portals</title>
+<style>
+:root {
+  --bg: #0c0a1a;
+  --bg-card: #17132e;
+  --border: #2a2050;
+  --accent: #7a00df;
+  --cyan: #34e2e4;
+  --text: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --radius: 8px;
+  --gradient-brand: linear-gradient(135deg, #34e2e4, #4721fb, #ab1dfe);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 24px;
+}
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 40px;
+}
+.portal-list {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.portal-card {
+  display: block;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color 0.2s, transform 0.15s;
+}
+.portal-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+.portal-card h2 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--cyan);
+  margin-bottom: 4px;
+}
+.portal-card .meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+.empty {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding: 40px 0;
+}
+</style>
+</head>
+<body>
+<h1>ICQ Portals</h1>
+<div class="subtitle">Customer Implementation & Configuration Questionnaires</div>
+<div class="portal-list" id="portalList">
+  <div class="empty">Loading portals...</div>
+</div>
+<script>
+// This landing page lists customer portals.
+// In a static GitHub Pages context, we maintain a simple manifest.
+// For now, list known portals manually. The generate script appends entries here.
+const PORTALS = [
+  { name: "ROMO", ticket: "TMT4-154", path: "ROMO/" }
+];
+
+const list = document.getElementById('portalList');
+if (PORTALS.length === 0) {
+  list.innerHTML = '<div class="empty">No customer portals generated yet.<br>Use <code>/icq-generate TMT4-XXX</code> to create one.</div>';
+} else {
+  list.innerHTML = PORTALS.map(p => `
+    <a class="portal-card" href="${p.path}">
+      <h2>${p.name}</h2>
+      <div class="meta">${p.ticket} &middot; Click to open questionnaire</div>
+    </a>
+  `).join('');
+}
+</script>
+</body>
+</html>
