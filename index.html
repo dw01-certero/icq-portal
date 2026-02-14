@@ -1611,28 +1611,26 @@ function loadState() {
       state.sectionsCollapsed[s.id] = true;
     }
   });
-  // Apply CUSTOMER_CONFIG on first load (when no saved state exists)
+  // Apply CUSTOMER_CONFIG — always enforce identity, mode, and locked sections
   if (typeof CUSTOMER_CONFIG !== 'undefined' && CUSTOMER_CONFIG) {
-    if (!localStorage.getItem(STORAGE_KEY)) {
-      state.customerName = CUSTOMER_CONFIG.customerName || state.customerName;
-      state.userName = CUSTOMER_CONFIG.userName || state.userName;
-      state.templateMode = CUSTOMER_CONFIG.templateMode || state.templateMode;
-      // Set locked sections as out-of-scope
-      if (CUSTOMER_CONFIG.lockedSections) {
-        Object.keys(CUSTOMER_CONFIG.lockedSections).forEach(id => {
-          if (CUSTOMER_CONFIG.lockedSections[id].locked) {
-            state.sectionsInScope[id] = false;
-          }
-        });
-      }
-      // Pre-select tech options
-      if (CUSTOMER_CONFIG.preSelectedTechs) {
-        Object.keys(CUSTOMER_CONFIG.preSelectedTechs).forEach(id => {
-          state.selectedTechs[id] = CUSTOMER_CONFIG.preSelectedTechs[id];
-        });
-      }
-      saveNow();
+    state.customerName = CUSTOMER_CONFIG.customerName || state.customerName;
+    state.userName = CUSTOMER_CONFIG.userName || state.userName;
+    state.templateMode = CUSTOMER_CONFIG.templateMode || state.templateMode;
+    // Always enforce locked sections as out-of-scope
+    if (CUSTOMER_CONFIG.lockedSections) {
+      Object.keys(CUSTOMER_CONFIG.lockedSections).forEach(id => {
+        if (CUSTOMER_CONFIG.lockedSections[id].locked) {
+          state.sectionsInScope[id] = false;
+        }
+      });
     }
+    // Pre-select tech options on first load only
+    if (!localStorage.getItem(STORAGE_KEY) && CUSTOMER_CONFIG.preSelectedTechs) {
+      Object.keys(CUSTOMER_CONFIG.preSelectedTechs).forEach(id => {
+        state.selectedTechs[id] = CUSTOMER_CONFIG.preSelectedTechs[id];
+      });
+    }
+    saveNow();
   }
 }
 
