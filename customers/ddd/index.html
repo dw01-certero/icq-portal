@@ -1663,6 +1663,10 @@ function loadState() {
         state.selectedTechs[id] = CUSTOMER_CONFIG.preSelectedTechs[id];
       });
     }
+    // Ensure all sections start collapsed in customer portals
+    ICQ_DATA.sections.forEach(s => {
+      state.sectionsCollapsed[s.id] = true;
+    });
     saveNow();
   }
 }

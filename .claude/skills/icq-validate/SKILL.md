@@ -110,6 +110,9 @@ Validate the `ICQ_DATA` structure in `index.html` for structural errors, inconsi
 - [ ] `renderSection()` adds `locked-notice` banner on locked sections
 - [ ] Locked-scope CSS classes exist (`.locked-scope`, `.locked-notice`)
 - [ ] `exportJSON()` includes `jiraTicket` in meta when CUSTOMER_CONFIG present
+- [ ] `allowedTechs` keys (if present) correspond to sections with `hasTechSelector: true`
+- [ ] `allowedTechs` values are valid tech option keys for that section
+- [ ] All sections start collapsed in customer portals (`sectionsCollapsed` forced to `true`)
 
 ## Auto-Fix Behavior (--fix flag)
 

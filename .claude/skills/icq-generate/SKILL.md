@@ -91,7 +91,7 @@ const userName = fields.assignee?.displayName || 'TBD';
 | **C4IBM** | 2.18 |
 | **C4Oracle** / **C4O** | 2.19 |
 | **C4SAP** | 2.21 |
-| **App-Centre** | 2.16 |
+| **App-Centre** / **Certero App-Centre** | 2.16 |
 
 ### All Conditional Sections (that can be locked)
 
@@ -148,7 +148,15 @@ const CUSTOMER_CONFIG = {
   preSelectedTechs: {
     // Only for C4SaaS section 2.20
     "2.20": ["m365", "adobe_cc", "salesforce"]
-  }
+  },
+  allowedTechs: {
+    // Restricts which tech options are VISIBLE per section (hides non-purchased connectors entirely)
+    // Keys are section IDs, values are arrays of allowed tech option keys
+    // An empty array [] hides ALL tech options for that section
+    // This is separate from preSelectedTechs which only controls initial selection state
+    "2.20": ["m365", "adobe_cc", "salesforce"]
+  },
+  sectionsCollapsed: true  // All sections start collapsed in customer portals
 };
 ```
 
@@ -251,6 +259,18 @@ After successful generation, report:
 - Jira comment posted (with deployment summary)
 - Summary of in-scope vs locked sections
 - Pre-selected tech options (if any)
+
+## Parent Ticket Identification
+
+Parent project tickets are those in the TMT4 queue whose summary does **NOT** contain "ICQ". Sub-tickets have patterns like ": C4EITAM ICQ", ": C4ESAM ICQ", ": C4ESaaS ICQ" in the summary. When processing tickets, always use the parent ticket (not the sub-tickets) to generate a customer portal.
+
+## Folder Name Sanitization
+
+Brackets `[]` are stripped from customer folder names for URL safety. Other special characters should also be sanitized as needed to produce valid directory/URL paths.
+
+## Batch Generation
+
+The canonical batch generation script is `batch-generate.ps1` at the repo root (`C:\Repo\ICQ\batch-generate.ps1`). It contains all parent ticket data, runs the full regeneration pipeline, and currently covers 23 tickets. Use this script when regenerating all customer portals (e.g., after a template change).
 
 ## Error Handling
 

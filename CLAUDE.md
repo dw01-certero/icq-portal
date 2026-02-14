@@ -236,6 +236,7 @@ The ICQ portal supports generating customer-specific portals from Jira TMT4 onbo
 | `customers/` | Output directory for generated portals |
 | `customers/index.html` | Landing page listing all portals |
 | `customers/assets/icq-icon.svg` | Certero-branded icon for Jira remote links |
+| `batch-generate.ps1` | Canonical batch generation script — contains all 23 parent ticket data, runs full regeneration pipeline |
 | `.github/workflows/pages.yml` | GitHub Pages deployment (deploys repo root) |
 
 ### CUSTOMER_CONFIG
@@ -245,6 +246,8 @@ When present at the top of the `<script>` block, the `CUSTOMER_CONFIG` object:
 - Locks non-purchased sections (greyed out, no scope toggle, notice banner)
 - Pre-selects technology options (e.g., SaaS connectors)
 - Greys out the non-relevant hosting mode toggle
+- Restricts visible tech options per section via `allowedTechs` (hides non-purchased connectors entirely)
+- Forces all sections to start collapsed (`sectionsCollapsed: true`)
 - Adds Jira ticket reference to exported JSON
 
 ### Generating a Portal

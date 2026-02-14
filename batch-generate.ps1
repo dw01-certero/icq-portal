@@ -9,6 +9,18 @@ param(
 # Ticket data extracted from Jira TMT4 queue "All Ongoing Projects"
 # Only parent project tickets with customfield_11578 (products) populated
 $tickets = @(
+    @{Key="TMT4-74"; Customer="USS"; Summary="USS - 2025 Certero of Enterprise ITAM 8"; Assignee="Jordan Wong"; Hosting="SaaS: Single Tenancy";
+      Products=@("C4ESAM","C4SaaS","C4Mobile"); ITAMModules=@("Application Monitoring (AppsMon)","Distribution","ITAM Connectors","Virtualization Connectors");
+      SAMModules=@(); SaaSConnectors=@()},
+    @{Key="TMT4-75"; Customer=""; Summary="existing cust - on prem"; Assignee="Jordan Wong"; Hosting="On Premise";
+      Products=@("C4ESAM","C4SaaS","Certero App-Centre"); ITAMModules=@("Distribution","Inventory");
+      SAMModules=@(); SaaSConnectors=@()},
+    @{Key="TMT4-90"; Customer="USS"; Summary="USS - 2025 Certero of Enterprise ITAM 9"; Assignee="Unassigned"; Hosting="On Premise";
+      Products=@("C4EITAM","C4ESAM","C4SaaS"); ITAMModules=@("Application Monitoring (AppsMon)","Distribution","Inventory");
+      SAMModules=@("Generic Licensing","Adobe Licensing"); SaaSConnectors=@("Adobe Creative Cloud","Microsoft 365","Salesforce")},
+    @{Key="TMT4-93"; Customer=""; Summary="[Company Name] - [Project Title]*"; Assignee="Richard Morgan"; Hosting="On Premise";
+      Products=@("C4EITAM","C4ESAM"); ITAMModules=@("Application Monitoring (AppsMon)","Distribution","Inventory");
+      SAMModules=@("Generic Licensing"); SaaSConnectors=@()},
     @{Key="TMT4-106"; Customer="aaaaa"; Summary="aaaaa"; Assignee="Jordan Wong"; Hosting="On Premise";
       Products=@("C4EITAM","C4ESAM","C4SaaS"); ITAMModules=@("Distribution","Inventory","ITAM Connectors");
       SAMModules=@("Adobe Licensing"); SaaSConnectors=@("Adobe Creative Cloud")},
@@ -35,6 +47,9 @@ $tickets = @(
     @{Key="TMT4-147"; Customer="test4"; Summary="test4"; Assignee="Jordan Wong"; Hosting="On Premise";
       Products=@("C4EITAM","C4ESAM","C4SaaS"); ITAMModules=@("Distribution");
       SAMModules=@("Generic Licensing","Adobe Licensing"); SaaSConnectors=@("Adobe Creative Cloud")},
+    @{Key="TMT4-151"; Customer="test4"; Summary="test4"; Assignee="Unassigned"; Hosting="On Premise";
+      Products=@("C4EITAM","C4ESAM","C4SaaS"); ITAMModules=@();
+      SAMModules=@(); SaaSConnectors=@()},
     @{Key="TMT4-152"; Customer="Company1"; Summary="project2"; Assignee="Jordan Wong"; Hosting="On Premise";
       Products=@("C4EITAM","C4ESAM"); ITAMModules=@("Distribution");
       SAMModules=@("Microsoft Licensing","Access Control"); SaaSConnectors=@()},
@@ -102,7 +117,7 @@ function Get-InScopeSections {
     if ($Products -contains "C4IBM") { $inScope += @("2.18") }
     if ($Products -match "C4Oracle|C4O") { $inScope += @("2.19") }
     if ($Products -contains "C4SAP") { $inScope += @("2.21") }
-    if ($Products -contains "App-Centre") { $inScope += @("2.16") }
+    if ($Products -contains "App-Centre" -or $Products -contains "Certero App-Centre") { $inScope += @("2.16") }
 
     return $inScope | Select-Object -Unique
 }
@@ -138,7 +153,7 @@ function Get-PreSelectedTechs {
 function Get-SafeFolderName {
     param($Name)
     # Remove/replace characters not safe for URLs and folder names
-    $safe = $Name -replace '[<>:"/\\|?*]', '' -replace '\s+', '-'
+    $safe = $Name -replace '[<>:"/\\|?*\[\]]', '' -replace '\s+', '-'
     return $safe
 }
 

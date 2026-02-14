@@ -127,3 +127,6 @@ To check if a question already exists in the portal:
 - Check `index2.html` as the canonical template if `index.html` is browser-locked
 - New sections added from reference material may require regeneration of existing customer portals via `/icq-generate`
 - After regeneration, commit and push to deploy, then Jira remote links and comments are auto-created on the ticket
+- When adding new SaaS connector types, they must be added to:
+  - The `saasMapping` in `batch-generate.ps1` (repo root)
+  - The `saasMapping` in `generate-customer.ps1`

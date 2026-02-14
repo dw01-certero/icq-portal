@@ -107,6 +107,9 @@ You:
 - [ ] Jira comment includes correct customer name, hosting model, and portal URL
 - [ ] Portal URL in Jira link matches the actual GitHub Pages URL
 - [ ] GitHub Pages deployment has completed (no 404 on portal URL)
+- [ ] `allowedTechs` matches Jira's "Modules purchased - C4SaaS" field (`customfield_11580`)
+- [ ] Non-purchased SaaS connectors are hidden entirely (not just unselected) via `allowedTechs`
+- [ ] All sections start collapsed on first load of customer portal (`sectionsCollapsed: true`)
 
 ### 6. Accessibility
 - [ ] Color contrast meets WCAG AA (text on dark background)
