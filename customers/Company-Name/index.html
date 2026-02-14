@@ -1660,10 +1660,11 @@ function loadState() {
         state.selectedTechs[id] = CUSTOMER_CONFIG.preSelectedTechs[id];
       });
     }
-    // Ensure all sections start collapsed in customer portals
+    // Ensure all sections start collapsed and Full ICQ tab active in customer portals
     ICQ_DATA.sections.forEach(s => {
       state.sectionsCollapsed[s.id] = true;
     });
+    state.activeTab = 'full';
     saveNow();
   }
 }
