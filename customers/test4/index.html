@@ -1506,6 +1506,9 @@ const CUSTOMER_CONFIG = {
   },
   preSelectedTechs: {
     "2.20": ["adobe_cc"]
+  },
+  allowedTechs: {
+    "2.20": ["adobe_cc"]
   }
 };
 
@@ -1902,12 +1905,18 @@ function renderSection(section, mode, isNewTab) {
 
   // Tech selector (if section has technology options)
   if (section.hasTechSelector && section.techOptions) {
+    // Filter tech options to only allowed ones when CUSTOMER_CONFIG.allowedTechs is set
+    let visibleTechOptions = section.techOptions;
+    if (typeof CUSTOMER_CONFIG !== 'undefined' && CUSTOMER_CONFIG && CUSTOMER_CONFIG.allowedTechs && CUSTOMER_CONFIG.allowedTechs[section.id]) {
+      const allowed = CUSTOMER_CONFIG.allowedTechs[section.id];
+      visibleTechOptions = section.techOptions.filter(t => allowed.includes(t.key));
+    }
     const techPanel = document.createElement('div');
     techPanel.className = 'tech-selector';
     techPanel.innerHTML = `
       <div class="tech-selector-label">Select technologies in use:</div>
       <div class="tech-selector-options">
-        ${section.techOptions.map(t => `
+        ${visibleTechOptions.map(t => `
           <label class="tech-option ${sectionTechs.includes(t.key) ? 'selected' : ''}" onclick="event.stopPropagation()">
             <input type="checkbox" ${sectionTechs.includes(t.key) ? 'checked' : ''} onchange="toggleTech('${section.id}', '${t.key}', this.checked)" />
             <span>${t.label}</span>
