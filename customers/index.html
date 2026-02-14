@@ -92,8 +92,25 @@ h1 {
 // In a static GitHub Pages context, we maintain a simple manifest.
 // For now, list known portals manually. The generate script appends entries here.
 const PORTALS = [
-  { name: "ROMO", ticket: "TMT4-154", path: "ROMO/" }
-];
+      { name: "aaaaa", ticket: "TMT4-106", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/aaaaa/" },
+      { name: "bb", ticket: "TMT4-110", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/bb/" },
+      { name: "ddd", ticket: "TMT4-117", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/ddd/" },
+      { name: "ads", ticket: "TMT4-122", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/ads/" },
+      { name: "Company Name", ticket: "TMT4-128", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/Company-Name/" },
+      { name: "ARUP Laboratories", ticket: "TMT4-136", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/ARUP-Laboratories/" },
+      { name: "test2", ticket: "TMT4-140", hosting: "SaaS", url: "https://dw01-certero.github.io/icq-portal/customers/test2/" },
+      { name: "test3", ticket: "TMT4-142", hosting: "SaaS", url: "https://dw01-certero.github.io/icq-portal/customers/test3/" },
+      { name: "test4", ticket: "TMT4-147", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/test4/" },
+      { name: "Company1", ticket: "TMT4-152", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/Company1/" },
+      { name: "ROMO", ticket: "TMT4-154", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/ROMO/" },
+      { name: "ROMO", ticket: "TMT4-156", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/ROMO-TMT4-156/" },
+      { name: "sad", ticket: "TMT4-158", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/sad/" },
+      { name: "aaa", ticket: "TMT4-163", hosting: "SaaS", url: "https://dw01-certero.github.io/icq-portal/customers/aaa/" },
+      { name: "ffff", ticket: "TMT4-166", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/ffff/" },
+      { name: "ARUP Laboratories", ticket: "TMT4-169", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/ARUP-Laboratories-TMT4-169/" },
+      { name: "Arup Lab", ticket: "TMT4-171", hosting: "On-Prem", url: "https://dw01-certero.github.io/icq-portal/customers/Arup-Lab/" },
+      { name: "test 2", ticket: "TMT4-173", hosting: "SaaS", url: "https://dw01-certero.github.io/icq-portal/customers/test-2/" }
+    ];
 
 const list = document.getElementById('portalList');
 if (PORTALS.length === 0) {
