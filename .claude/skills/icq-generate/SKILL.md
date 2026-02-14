@@ -161,7 +161,8 @@ const CUSTOMER_CONFIG = {
     // This is separate from preSelectedTechs which only controls initial selection state
     "2.20": ["m365", "adobe_cc", "salesforce"]
   },
-  sectionsCollapsed: true  // All sections start collapsed in customer portals
+  sectionsCollapsed: true,  // All sections start collapsed in customer portals
+  activeTab: 'full'         // Full ICQ tab forced active on every load
 };
 ```
 

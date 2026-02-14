@@ -248,6 +248,7 @@ When present at the top of the `<script>` block, the `CUSTOMER_CONFIG` object:
 - Greys out the non-relevant hosting mode toggle
 - Restricts visible tech options per section via `allowedTechs` (hides non-purchased connectors entirely)
 - Forces all sections to start collapsed (`sectionsCollapsed: true`)
+- Forces Full ICQ tab active on every load (`activeTab: 'full'`)
 - Adds Jira ticket reference to exported JSON
 
 ### Generating a Portal

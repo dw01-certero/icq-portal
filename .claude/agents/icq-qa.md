@@ -100,6 +100,7 @@ You:
 - [ ] Sections 2.11-2.14 (SNMP, Intune, Meraki, ServiceNow) are NEVER locked — always show with toggle
 - [ ] Sections 2.8, 2.9 only locked when their C4EITAM module is not purchased
 - [ ] Section 2.17 only locked when C4ESAM is not in purchased products
+- [ ] Full ICQ tab is active on load (`activeTab` forced to `'full'`)
 
 ### 9. Jira Integration Verification (after `/icq-generate`)
 - [ ] Remote link exists on the Jira ticket with correct portal URL

@@ -42,14 +42,14 @@ $tickets = @(
       Products=@("C4EITAM","C4ESAM"); ITAMModules=@("Distribution");
       SAMModules=@("Access Control"); SaaSConnectors=@()},
     @{Key="TMT4-142"; Customer="test3"; Summary="test3"; Assignee="Jordan Wong"; Hosting="SaaS: Single Tenancy";
-      Products=@("C4EITAM","C4ESAM"); ITAMModules=@("Distribution");
-      SAMModules=@("Access Control"); SaaSConnectors=@()},
+      Products=@("C4EITAM"); ITAMModules=@("Inventory","ITAM Connectors");
+      SAMModules=@(); SaaSConnectors=@()},
     @{Key="TMT4-147"; Customer="test4"; Summary="test4"; Assignee="Jordan Wong"; Hosting="On Premise";
       Products=@("C4EITAM","C4ESAM","C4SaaS"); ITAMModules=@("Distribution");
       SAMModules=@("Generic Licensing","Adobe Licensing"); SaaSConnectors=@("Adobe Creative Cloud")},
     @{Key="TMT4-151"; Customer="test4"; Summary="test4"; Assignee="Unassigned"; Hosting="On Premise";
-      Products=@("C4EITAM","C4ESAM","C4SaaS"); ITAMModules=@();
-      SAMModules=@(); SaaSConnectors=@()},
+      Products=@("C4EITAM","C4ESAM","C4SaaS"); ITAMModules=@("Inventory","ITAM Connectors","Virtualization Connectors");
+      SAMModules=@("Generic Licensing","Adobe Licensing","Microsoft Licensing"); SaaSConnectors=@("Adobe Creative Cloud","Microsoft 365","Salesforce")},
     @{Key="TMT4-152"; Customer="Company1"; Summary="project2"; Assignee="Jordan Wong"; Hosting="On Premise";
       Products=@("C4EITAM","C4ESAM"); ITAMModules=@("Distribution");
       SAMModules=@("Microsoft Licensing","Access Control"); SaaSConnectors=@()},
