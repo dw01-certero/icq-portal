@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+
+  "permissions": {
+    "allow": [
+      "Read(**/*.html)",
+      "Read(**/*.js)",
+      "Read(**/*.md)",
+      "Read(**/*.json)",
+      "Read(**/*.ps1)",
+      "Read(**/*.yml)",
+      "Glob(*)",
+      "Grep(*)",
+      "mcp__mcp-atlassian__jira_get_issue"
+    ],
+    "deny": [
+      "Bash(rm *)",
+      "Bash(del *)",
+      "Bash(*--force*)",
+      "Bash(*-rf*)",
+      "Read(.env*)",
+      "Read(*secret*)",
+      "Read(*credential*)",
+      "Read(*password*)"
+    ]
+  },
+
+  "env": {
+    "ICQ_PORTAL_FILE": "index.html",
+    "ICQ_PORTAL_TEMPLATE": "index2.html",
+    "ICQ_BACKUP_FILE": "index.html.bak",
+    "ICQ_PROJECT_ROOT": "C:\\Repo\\ICQ",
+    "ICQ_CUSTOMERS_DIR": "C:\\Repo\\ICQ\\customers",
+    "ICQ_GITHUB_PAGES_URL": "https://dw01-certero.github.io/icq-portal"
+  },
+
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -File \".claude\\hooks\\safety-check.ps1\"",
+            "timeout": 5000
+          }
+        ]
+      },
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -File \".claude\\hooks\\icq-backup.ps1\"",
+            "timeout": 10000
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -File \".claude\\hooks\\icq-structure-check.ps1\"",
+            "timeout": 15000
+          },
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -File \".claude\\hooks\\icq-duplicate-check.ps1\"",
+            "timeout": 10000
+          },
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -File \".claude\\hooks\\onedrive-check.ps1\"",
+            "timeout": 5000
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "powershell -NoProfile -File \".claude\\hooks\\icq-session-reminder.ps1\"",
+            "timeout": 5000
+          }
+        ]
+      }
+    ]
+  }
+}
