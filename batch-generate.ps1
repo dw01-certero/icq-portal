@@ -60,8 +60,8 @@ $tickets = @(
       Products=@("C4EITAM","C4ESAM"); ITAMModules=@("Distribution");
       SAMModules=@("Access Control"); SaaSConnectors=@()},
     @{Key="TMT4-173"; Customer="test 2"; Summary="project 2"; Assignee="Unassigned"; Hosting="SaaS: Single Tenancy";
-      Products=@("C4ESAM","C4SaaS"); ITAMModules=@();
-      SAMModules=@(); SaaSConnectors=@()}
+      Products=@("C4EITAM","C4ESAM","C4SaaS"); ITAMModules=@("Inventory","ITAM Connectors","Virtualization Connectors");
+      SAMModules=@(); SaaSConnectors=@("Microsoft 365")}
 )
 
 # SaaS connector to techOption key mapping
