@@ -1653,6 +1653,12 @@ function loadState() {
         }
       });
     }
+    // Force non-locked conditional sections to in-scope (especially 2.11-2.14 which are never locked)
+    ICQ_DATA.sections.forEach(s => {
+      if (s.conditional && (!CUSTOMER_CONFIG.lockedSections || !CUSTOMER_CONFIG.lockedSections[s.id])) {
+        state.sectionsInScope[s.id] = true;
+      }
+    });
     // Pre-select tech options on first load only
     if (!localStorage.getItem(STORAGE_KEY) && CUSTOMER_CONFIG.preSelectedTechs) {
       Object.keys(CUSTOMER_CONFIG.preSelectedTechs).forEach(id => {
