@@ -130,7 +130,7 @@ Key: `icq_portal_data`
 | 2.17 | Enterprise SAM | Yes | No |
 | 2.18 | Certero for IBM | Yes | Yes (solaris, hpux, aix, subcapacity, powervm) |
 | 2.19 | Certero for Oracle | Yes | Yes (database, middleware, ebs) |
-| 2.20 | Certero for SaaS | Yes | Yes (12 SaaS platforms) |
+| 2.20 | Certero for SaaS | Yes | Yes (11 SaaS platforms: m365, adobe, salesforce, google, okta, zoom, slack, box, dropbox, tableau, wrike) |
 | 2.21 | Certero for SAP | Yes | No |
 
 ---

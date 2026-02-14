@@ -118,7 +118,7 @@ You:
 - [ ] `allowedTechs` matches Jira's "Modules purchased - C4SaaS" field — keys are section IDs, values are arrays of allowed tech option keys; empty `[]` hides all
 - [ ] When C4EITAM is in purchased products, "Modules purchased - C4EITAM" (`customfield_11249`) was checked to determine which sections (2.8, 2.9, 1.8, 2.10) are unlocked
 - [ ] Non-purchased SaaS connectors are hidden entirely (not just unselected) via `allowedTechs`
-- [ ] SaaS connector mapping includes all 12 connectors (M365, Adobe CC, Salesforce, Google Workspace, ServiceNow, Zoom, Slack, Dropbox, Box, DocuSign, Atlassian, Okta)
+- [ ] SaaS connector mapping includes all 11 connectors matching template techOption keys (m365, adobe, salesforce, google, okta, zoom, slack, box, dropbox, tableau, wrike)
 - [ ] All sections start collapsed on first load of customer portal (`sectionsCollapsed: true`)
 - [ ] Customer folder names have brackets `[]` stripped for URL safety
 

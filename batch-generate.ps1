@@ -39,8 +39,8 @@ $tickets = @(
       Products=@("C4EITAM","C4ESAM"); ITAMModules=@("Distribution");
       SAMModules=@("Access Control"); SaaSConnectors=@()},
     @{Key="TMT4-140"; Customer="test2"; Summary="test2"; Assignee="Jordan Wong"; Hosting="SaaS: Single Tenancy";
-      Products=@("C4EITAM","C4ESAM"); ITAMModules=@("Distribution");
-      SAMModules=@("Access Control"); SaaSConnectors=@()},
+      Products=@("C4EITAM","C4ESAM","C4SaaS"); ITAMModules=@("Distribution");
+      SAMModules=@("Access Control"); SaaSConnectors=@("Adobe Creative Cloud","Microsoft 365","Salesforce","Google Workspace","Okta","Box","Dropbox","Slack","Tableau","Wrike","Zoom")},
     @{Key="TMT4-142"; Customer="test3"; Summary="test3"; Assignee="Jordan Wong"; Hosting="SaaS: Single Tenancy";
       Products=@("C4EITAM"); ITAMModules=@("Inventory","ITAM Connectors");
       SAMModules=@(); SaaSConnectors=@()},
@@ -82,17 +82,16 @@ $tickets = @(
 # SaaS connector to techOption key mapping
 $saasMapping = @{
     "Microsoft 365" = "m365"
-    "Adobe Creative Cloud" = "adobe_cc"
+    "Adobe Creative Cloud" = "adobe"
     "Salesforce" = "salesforce"
-    "Google Workspace" = "google_workspace"
-    "ServiceNow" = "servicenow_saas"
+    "Google Workspace" = "google"
     "Zoom" = "zoom"
     "Slack" = "slack"
     "Dropbox" = "dropbox"
     "Box" = "box"
-    "DocuSign" = "docusign"
-    "Atlassian" = "atlassian"
     "Okta" = "okta"
+    "Tableau" = "tableau"
+    "Wrike" = "wrike"
 }
 
 # All conditional section IDs that can be locked by product scope

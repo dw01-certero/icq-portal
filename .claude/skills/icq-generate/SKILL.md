@@ -135,17 +135,18 @@ When C4SaaS is purchased, pre-select these tech options in section 2.20 based on
 | Jira SaaS Connector | techOption Key |
 |---------------------|---------------|
 | Microsoft 365 | m365 |
-| Adobe Creative Cloud | adobe_cc |
+| Adobe Creative Cloud | adobe |
 | Salesforce | salesforce |
-| Google Workspace | google_workspace |
-| ServiceNow | servicenow_saas |
+| Google Workspace | google |
 | Zoom | zoom |
 | Slack | slack |
 | Dropbox | dropbox |
 | Box | box |
-| DocuSign | docusign |
-| Atlassian | atlassian |
 | Okta | okta |
+| Tableau | tableau |
+| Wrike | wrike |
+
+**IMPORTANT:** These keys must exactly match the `techOptions[].key` values in section 2.20 of the base template (`index.html`). If a key doesn't match, the connector will be hidden even when purchased.
 
 ## CUSTOMER_CONFIG Object Structure
 
