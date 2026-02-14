@@ -243,7 +243,7 @@ The ICQ portal supports generating customer-specific portals from Jira TMT4 onbo
 When present at the top of the `<script>` block, the `CUSTOMER_CONFIG` object:
 - Auto-bypasses the gate modal
 - Pre-populates customer name, user name, and deployment mode
-- Locks non-purchased sections (greyed out, no scope toggle, notice banner)
+- Locks non-purchased sections (greyed out, no scope toggle, notice banner) — except 2.11-2.14 which always show with a user toggle
 - Pre-selects technology options (e.g., SaaS connectors)
 - Greys out the non-relevant hosting mode toggle
 - Restricts visible tech options per section via `allowedTechs` (hides non-purchased connectors entirely)

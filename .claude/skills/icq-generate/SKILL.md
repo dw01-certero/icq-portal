@@ -82,36 +82,41 @@ const userName = fields.assignee?.displayName || 'TBD';
 |-------------|----------------------|
 | **C4EITAM** (base) | 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.9, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.15 |
 | **C4EITAM + "Inventory"** | 2.3, 2.4 (already included in base) |
-| **C4EITAM + "ITAM Connectors"** | 2.11, 2.12, 2.13, 2.14 |
-| **C4EITAM + "Application Monitoring"** | 2.9 |
-| **C4EITAM + "Distribution"** | 2.8 |
-| **C4EITAM + "Patch Management"** | 1.8, 2.10 |
-| **C4ESAM** | 2.17 |
-| **C4SaaS** | 2.20 |
+| **C4EITAM + "Application Monitoring"** | 2.9 (unlocked with toggle) |
+| **C4EITAM + "Distribution"** | 2.8 (unlocked with toggle) |
+| **C4EITAM + "Patch Management"** | 1.8, 2.10 (unlocked with toggle) |
+| **C4ESAM** | 2.17 (unlocked with toggle) |
+| **C4SaaS** | 2.20 (unlocked with toggle, tech options filtered by `allowedTechs`) |
 | **C4IBM** | 2.18 |
 | **C4Oracle** / **C4O** | 2.19 |
 | **C4SAP** | 2.21 |
 | **App-Centre** / **Certero App-Centre** | 2.16 |
 
-### All Conditional Sections (that can be locked)
+### Section Locking Rules
 
-These are the sections with `conditional: true` in ICQ_DATA:
-- 1.8 (Patch Management)
-- 2.8 (Distribution)
-- 2.9 (Application Monitoring)
-- 2.10 (Patch Management)
+Sections fall into three categories:
+
+**1. Lockable by product/module (greyed out if not purchased):**
+- 1.8, 2.10 — Locked unless "Patch Management" in C4EITAM modules
+- 2.8 — Locked unless "Distribution" in C4EITAM modules
+- 2.9 — Locked unless "Application Monitoring" in C4EITAM modules
+- 2.16 — Locked unless App-Centre / Certero App-Centre purchased
+- 2.17 — Locked unless C4ESAM purchased
+- 2.18 — Locked unless C4IBM purchased
+- 2.19 — Locked unless C4Oracle purchased
+- 2.20 — Locked unless C4SaaS purchased
+- 2.21 — Locked unless C4SAP purchased
+
+**2. Always shown with user toggle (never locked):**
 - 2.11 (SNMP Network Discovery)
 - 2.12 (Microsoft Intune)
 - 2.13 (Cisco Meraki)
 - 2.14 (ServiceNow Integration)
-- 2.16 (App-Centre)
-- 2.17 (Enterprise SAM)
-- 2.18 (Certero for IBM)
-- 2.19 (Certero for Oracle)
-- 2.20 (Certero for SaaS)
-- 2.21 (Certero for SAP)
 
-Non-conditional sections (1.0-1.7, 1.9, 2.1-2.7, 2.15) are always in scope if C4EITAM is purchased.
+These always appear in the Full ICQ tab with a conditional "In Scope" checkbox. The user can manually move them to Out of Scope.
+
+**3. Non-conditional (always in scope when C4EITAM purchased):**
+- 1.0-1.7, 1.9, 2.1-2.7, 2.15
 
 ### SaaS Connector-to-techOption Key Mapping
 
