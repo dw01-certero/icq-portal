@@ -92,4 +92,13 @@ When adding new sections that correspond to purchasable Certero products or modu
 3. If the new section is `conditional: true`, it can be locked via `CUSTOMER_CONFIG.lockedSections` in customer portals
 4. After adding, regenerate affected customer portals with `/icq-generate` (this also commits, pushes, and updates Jira links/comments)
 5. GitHub Pages URL: `https://dw01-certero.github.io/icq-portal/customers/<NAME>/`
-6. If the new section has `hasTechSelector: true`, update the `allowedTechs` logic in both `batch-generate.ps1` and `generate-customer.ps1` to support restricting tech options for the new section in customer portals
+6. If the new section has `hasTechSelector: true`, update the `allowedTechs` logic in `batch-generate.ps1` (the canonical batch generation script at repo root) to support restricting tech options for the new section in customer portals
+
+### Three-Tier Section Locking
+
+New conditional sections must be classified into one of three tiers:
+- **Tier 1 — Lockable by product/module:** 1.8, 2.8, 2.9, 2.10, 2.16, 2.17, 2.18, 2.19, 2.20, 2.21
+- **Tier 2 — Always shown with user toggle (NEVER locked):** 2.11, 2.12, 2.13, 2.14
+- **Tier 3 — Non-conditional (always in scope when C4EITAM):** 1.0-1.7, 1.9, 2.1-2.7, 2.15
+
+Add new lockable sections to `$allConditionalSections` in `batch-generate.ps1`.

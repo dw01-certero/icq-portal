@@ -135,6 +135,7 @@ When C4SaaS is purchased, pre-select these tech options in section 2.20 based on
 | Box | box |
 | DocuSign | docusign |
 | Atlassian | atlassian |
+| Okta | okta |
 
 ## CUSTOMER_CONFIG Object Structure
 

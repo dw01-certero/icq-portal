@@ -137,5 +137,14 @@ When adding new sections, be aware of the customer portal generation system:
 - The product-to-section mapping in `C:\Repo\ICQ\.claude\skills\icq-generate\SKILL.md` may need updating if a new section maps to a specific Jira product/module
 - After adding a section, update the mapping table in the icq-generate SKILL.md if it corresponds to a purchasable product
 - Existing generated customer portals (in `customers/`) are NOT automatically updated — they must be regenerated with `/icq-generate`
-- After regeneration, git commit and push to deploy via GitHub Pages (`pages.yml` handles deployment)
+- After regeneration, git commit and push to deploy via GitHub Pages (`pages.yml` handles deployment — do NOT create separate deploy workflows)
 - Jira remote links on existing tickets will still point to the old portal — the URL doesn't change if the customer name stays the same
+
+### Three-Tier Section Locking
+
+New sections must be classified into one of three tiers:
+- **Tier 1 — Lockable by product/module:** 1.8, 2.8, 2.9, 2.10, 2.16, 2.17, 2.18, 2.19, 2.20, 2.21. Greyed out if not purchased.
+- **Tier 2 — Always shown with user toggle (NEVER locked):** 2.11, 2.12, 2.13, 2.14.
+- **Tier 3 — Non-conditional (always in scope when C4EITAM):** 1.0-1.7, 1.9, 2.1-2.7, 2.15.
+
+If the new section has `hasTechSelector: true`, the `allowedTechs` logic in `batch-generate.ps1` may also need updating to restrict visible tech options per section in customer portals.

@@ -111,9 +111,13 @@ You:
 - [ ] Jira comment includes correct customer name, hosting model, and portal URL
 - [ ] Portal URL in Jira link matches the actual GitHub Pages URL
 - [ ] GitHub Pages deployment has completed (no 404 on portal URL)
-- [ ] `allowedTechs` matches Jira's "Modules purchased - C4SaaS" field (`customfield_11580`)
+- [ ] Batch regeneration uses `batch-generate.ps1` at repo root (canonical script with all 23 parent tickets)
+- [ ] Parent tickets identified correctly (TMT4 tickets whose summary does NOT contain "ICQ")
+- [ ] `allowedTechs` matches Jira's "Modules purchased - C4SaaS" field (`customfield_11580`) — keys are section IDs, values are arrays of allowed tech option keys; empty `[]` hides all
 - [ ] Non-purchased SaaS connectors are hidden entirely (not just unselected) via `allowedTechs`
+- [ ] SaaS connector mapping includes all 12 connectors (M365, Adobe CC, Salesforce, Google Workspace, ServiceNow, Zoom, Slack, Dropbox, Box, DocuSign, Atlassian, Okta)
 - [ ] All sections start collapsed on first load of customer portal (`sectionsCollapsed: true`)
+- [ ] Customer folder names have brackets `[]` stripped for URL safety
 
 ### 6. Accessibility
 - [ ] Color contrast meets WCAG AA (text on dark background)

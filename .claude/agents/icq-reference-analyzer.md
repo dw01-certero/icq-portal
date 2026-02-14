@@ -126,7 +126,15 @@ To check if a question already exists in the portal:
 - New sections added from reference material may need to be mapped to Jira products in the `/icq-generate` skill
 - Check `index2.html` as the canonical template if `index.html` is browser-locked
 - New sections added from reference material may require regeneration of existing customer portals via `/icq-generate`
-- After regeneration, commit and push to deploy, then Jira remote links and comments are auto-created on the ticket
+- After regeneration, commit and push to deploy via GitHub Pages (`pages.yml` from repo root — do NOT create separate deploy workflows)
+- Jira remote links and comments are auto-created on tickets after generation
+- Jira remote links cannot be deleted via API — must be manually removed from Jira UI
+- New conditional sections fall into the three-tier locking system:
+  - **Tier 1** (lockable by product/module): sections tied to specific Jira products
+  - **Tier 2** (never locked, user toggle): sections like 2.11-2.14
+  - **Tier 3** (non-conditional, always in scope with C4EITAM): base infrastructure sections
 - When adding new SaaS connector types, they must be added to:
-  - The `saasMapping` in `batch-generate.ps1` (repo root)
-  - The `saasMapping` in `generate-customer.ps1`
+  - The `saasMapping` in `batch-generate.ps1` (repo root) — this is the canonical mapping (currently 12 connectors including Okta)
+  - The SaaS connector mapping table in `.claude/skills/icq-generate/SKILL.md`
+  - The techOptions array in section 2.20 of the base template (`index2.html`)
+- Note: `generate-customer.ps1` does NOT contain a saasMapping — it receives pre-built JSON from `batch-generate.ps1`

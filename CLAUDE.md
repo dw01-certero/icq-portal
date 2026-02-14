@@ -130,7 +130,7 @@ Key: `icq_portal_data`
 | 2.17 | Enterprise SAM | Yes | No |
 | 2.18 | Certero for IBM | Yes | Yes (solaris, hpux, aix, subcapacity, powervm) |
 | 2.19 | Certero for Oracle | Yes | Yes (database, middleware, ebs) |
-| 2.20 | Certero for SaaS | Yes | Yes (11 SaaS platforms) |
+| 2.20 | Certero for SaaS | Yes | Yes (12 SaaS platforms) |
 | 2.21 | Certero for SAP | Yes | No |
 
 ---
@@ -236,20 +236,25 @@ The ICQ portal supports generating customer-specific portals from Jira TMT4 onbo
 | `customers/` | Output directory for generated portals |
 | `customers/index.html` | Landing page listing all portals |
 | `customers/assets/icq-icon.svg` | Certero-branded icon for Jira remote links |
-| `batch-generate.ps1` | Canonical batch generation script — contains all 23 parent ticket data, runs full regeneration pipeline |
+| `batch-generate.ps1` | Canonical batch generation script — contains all 23 parent ticket data, runs full regeneration pipeline. Parent tickets are TMT4 tickets whose summary does NOT contain "ICQ". |
 | `.github/workflows/pages.yml` | GitHub Pages deployment (deploys repo root) |
 
 ### CUSTOMER_CONFIG
 When present at the top of the `<script>` block, the `CUSTOMER_CONFIG` object:
 - Auto-bypasses the gate modal
 - Pre-populates customer name, user name, and deployment mode
-- Locks non-purchased sections (greyed out, no scope toggle, notice banner) — except 2.11-2.14 which always show with a user toggle
-- Pre-selects technology options (e.g., SaaS connectors)
+- Locks non-purchased sections via three-tier locking (see below)
+- Pre-selects technology options via `preSelectedTechs` (e.g., SaaS connectors)
 - Greys out the non-relevant hosting mode toggle
-- Restricts visible tech options per section via `allowedTechs` (hides non-purchased connectors entirely)
+- Restricts visible tech options per section via `allowedTechs` — keys are section IDs, values are arrays of allowed tech option keys; empty array `[]` hides ALL options
 - Forces all sections to start collapsed (`sectionsCollapsed: true`)
 - Forces Full ICQ tab active on every load (`activeTab: 'full'`)
 - Adds Jira ticket reference to exported JSON
+
+### Three-Tier Section Locking
+- **Tier 1 — Lockable by product/module:** 1.8, 2.8, 2.9, 2.10, 2.16, 2.17, 2.18, 2.19, 2.20, 2.21. Greyed out with notice banner if not purchased.
+- **Tier 2 — Always shown with user toggle (NEVER locked):** 2.11, 2.12, 2.13, 2.14. Always appear with conditional "In Scope" checkbox.
+- **Tier 3 — Non-conditional (always in scope when C4EITAM):** 1.0-1.7, 1.9, 2.1-2.7, 2.15.
 
 ### Generating a Portal
 ```
@@ -261,6 +266,7 @@ This reads the Jira ticket, maps products/modules to sections, writes to `custom
 - **URL pattern:** `https://dw01-certero.github.io/icq-portal/customers/<NAME>/`
 - **Deployment:** `pages.yml` deploys from repo root on push to `main`
 - **Do NOT create a separate deploy workflow** — it conflicts with `pages.yml` and causes 404s
+- **Folder name sanitization:** Brackets `[]` are stripped from customer folder names for URL safety
 
 ### Jira Integration
 - **Remote link:** Added to the ticket with `🟣 Open ICQ Portal` title and custom icon

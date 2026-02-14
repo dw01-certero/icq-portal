@@ -111,8 +111,9 @@ Validate the `ICQ_DATA` structure in `index.html` for structural errors, inconsi
 - [ ] Locked-scope CSS classes exist (`.locked-scope`, `.locked-notice`)
 - [ ] `exportJSON()` includes `jiraTicket` in meta when CUSTOMER_CONFIG present
 - [ ] `allowedTechs` keys (if present) correspond to sections with `hasTechSelector: true`
-- [ ] `allowedTechs` values are valid tech option keys for that section
+- [ ] `allowedTechs` values are arrays of valid tech option keys for that section (empty `[]` hides ALL options)
 - [ ] All sections start collapsed in customer portals (`sectionsCollapsed` forced to `true`)
+- [ ] Full ICQ tab is active on every load (`activeTab` forced to `'full'`)
 
 ## Auto-Fix Behavior (--fix flag)
 
