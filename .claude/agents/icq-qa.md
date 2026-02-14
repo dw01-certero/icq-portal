@@ -97,7 +97,8 @@ You:
 - [ ] Export JSON includes `jiraTicket` in meta
 - [ ] localStorage save/load works (refresh preserves answers)
 - [ ] Non-locked conditional sections can still be toggled normally
-- [ ] Sections 2.11-2.14 (SNMP, Intune, Meraki, ServiceNow) are NEVER locked — always show with toggle
+- [ ] Sections 2.11-2.14 (SNMP, Intune, Meraki, ServiceNow) are NEVER locked — always show in Full ICQ tab with toggle
+- [ ] Non-locked conditional sections are explicitly forced in-scope by the CUSTOMER_CONFIG block in `loadState()` (not just default initialization)
 - [ ] Sections 2.8, 2.9 only locked when their C4EITAM module is not purchased
 - [ ] Section 2.17 only locked when C4ESAM is not in purchased products
 - [ ] Full ICQ tab is active on load (`activeTab` forced to `'full'`)

@@ -253,7 +253,7 @@ When present at the top of the `<script>` block, the `CUSTOMER_CONFIG` object:
 
 ### Three-Tier Section Locking
 - **Tier 1 — Lockable by product/module:** 1.8, 2.8, 2.9, 2.10, 2.16, 2.17, 2.18, 2.19, 2.20, 2.21. Greyed out with notice banner if not purchased.
-- **Tier 2 — Always shown with user toggle (NEVER locked):** 2.11, 2.12, 2.13, 2.14. Always appear with conditional "In Scope" checkbox.
+- **Tier 2 — Always shown with user toggle (NEVER locked):** 2.11, 2.12, 2.13, 2.14. Always appear in Full ICQ tab with conditional "In Scope" checkbox. Explicitly forced in-scope by the CUSTOMER_CONFIG block in `loadState()`.
 - **Tier 3 — Non-conditional (always in scope when C4EITAM):** 1.0-1.7, 1.9, 2.1-2.7, 2.15.
 
 ### Generating a Portal

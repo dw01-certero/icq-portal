@@ -113,7 +113,7 @@ Sections fall into three categories:
 - 2.13 (Cisco Meraki)
 - 2.14 (ServiceNow Integration)
 
-These always appear in the Full ICQ tab with a conditional "In Scope" checkbox. The user can manually move them to Out of Scope.
+These always appear in the Full ICQ tab with a conditional "In Scope" checkbox. The user can manually move them to Out of Scope. The CUSTOMER_CONFIG block in `loadState()` explicitly forces all non-locked conditional sections to `sectionsInScope = true` to ensure they default to the Full ICQ tab.
 
 **3. Non-conditional (always in scope when C4EITAM purchased):**
 - 1.0-1.7, 1.9, 2.1-2.7, 2.15
