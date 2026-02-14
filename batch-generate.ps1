@@ -97,7 +97,8 @@ $saasMapping = @{
 
 # All conditional section IDs that can be locked by product scope
 # Note: 2.11-2.14 (SNMP, Intune, Meraki, ServiceNow) are NOT locked — they always
-# appear in the Full ICQ tab with a user-togglable "In Scope" checkbox
+# appear in the Full ICQ tab with a user-togglable "In Scope" checkbox.
+# 2.8 (Distribution) and 2.9 (AppsMon) ARE locked unless purchased in C4EITAM modules.
 $allConditionalSections = @("1.8","2.8","2.9","2.10","2.16","2.17","2.18","2.19","2.20","2.21")
 
 function Get-InScopeSections {
