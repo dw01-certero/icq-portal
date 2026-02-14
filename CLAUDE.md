@@ -251,6 +251,12 @@ When present at the top of the `<script>` block, the `CUSTOMER_CONFIG` object:
 - Forces Full ICQ tab active on every load (`activeTab: 'full'`)
 - Adds Jira ticket reference to exported JSON
 
+### Key Principle: Always Check Sub-Modules
+When a product appears in `customfield_11578` (Certero products), always check the corresponding modules field:
+- **C4EITAM** → `customfield_11249` (Modules purchased - C4EITAM) — determines which sections are unlocked (Distribution, App Monitoring, Patch Management, etc.)
+- **C4ESAM** → `customfield_11579` (Modules purchased - C4ESAM)
+- **C4SaaS** → `customfield_11580` (Modules purchased - C4SaaS) — **only purchased connectors** appear as tech options in section 2.20 via `allowedTechs`/`preSelectedTechs`
+
 ### Three-Tier Section Locking
 - **Tier 1 — Lockable by product/module:** 1.8, 2.8, 2.9, 2.10, 2.16, 2.17, 2.18, 2.19, 2.20, 2.21. Greyed out with notice banner if not purchased.
 - **Tier 2 — Always shown with user toggle (NEVER locked):** 2.11, 2.12, 2.13, 2.14. Always appear in Full ICQ tab with conditional "In Scope" checkbox. Explicitly forced in-scope by the CUSTOMER_CONFIG block in `loadState()`.

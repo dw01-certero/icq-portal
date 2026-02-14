@@ -86,11 +86,21 @@ const userName = fields.assignee?.displayName || 'TBD';
 | **C4EITAM + "Distribution"** | 2.8 (unlocked with toggle) |
 | **C4EITAM + "Patch Management"** | 1.8, 2.10 (unlocked with toggle) |
 | **C4ESAM** | 2.17 (unlocked with toggle) |
-| **C4SaaS** | 2.20 (unlocked with toggle, tech options filtered by `allowedTechs`) |
+| **C4SaaS** | 2.20 (unlocked with toggle). **IMPORTANT:** When C4SaaS is purchased, you MUST check `customfield_11580` (Modules purchased - C4SaaS) and only show those specific connectors via `allowedTechs` and `preSelectedTechs`. |
 | **C4IBM** | 2.18 |
 | **C4Oracle** / **C4O** | 2.19 |
 | **C4SAP** | 2.21 |
 | **App-Centre** / **Certero App-Centre** | 2.16 |
+
+### Key Principle: Always Check Sub-Modules
+
+When a product appears in "Certero products for this project" (`customfield_11578`), you **MUST** check the corresponding modules field to determine exactly what is in scope:
+
+| Product | Modules Field | What to Check |
+|---------|--------------|---------------|
+| **C4EITAM** | `customfield_11249` (Modules purchased - C4EITAM) | Which ITAM modules are purchased (Distribution, App Monitoring, Patch Management, etc.) — determines which sections are unlocked vs locked |
+| **C4ESAM** | `customfield_11579` (Modules purchased - C4ESAM) | Which SAM modules are purchased |
+| **C4SaaS** | `customfield_11580` (Modules purchased - C4SaaS) | Which SaaS connectors are purchased — **only these** appear as tech options in section 2.20 via `allowedTechs` and `preSelectedTechs` |
 
 ### Section Locking Rules
 

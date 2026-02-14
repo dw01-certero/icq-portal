@@ -114,7 +114,9 @@ You:
 - [ ] GitHub Pages deployment has completed (no 404 on portal URL)
 - [ ] Batch regeneration uses `batch-generate.ps1` at repo root (canonical script with all 23 parent tickets)
 - [ ] Parent tickets identified correctly (TMT4 tickets whose summary does NOT contain "ICQ")
-- [ ] `allowedTechs` matches Jira's "Modules purchased - C4SaaS" field (`customfield_11580`) — keys are section IDs, values are arrays of allowed tech option keys; empty `[]` hides all
+- [ ] When C4SaaS is in purchased products, "Modules purchased - C4SaaS" (`customfield_11580`) was checked and only those connectors appear in section 2.20
+- [ ] `allowedTechs` matches Jira's "Modules purchased - C4SaaS" field — keys are section IDs, values are arrays of allowed tech option keys; empty `[]` hides all
+- [ ] When C4EITAM is in purchased products, "Modules purchased - C4EITAM" (`customfield_11249`) was checked to determine which sections (2.8, 2.9, 1.8, 2.10) are unlocked
 - [ ] Non-purchased SaaS connectors are hidden entirely (not just unselected) via `allowedTechs`
 - [ ] SaaS connector mapping includes all 12 connectors (M365, Adobe CC, Salesforce, Google Workspace, ServiceNow, Zoom, Slack, Dropbox, Box, DocuSign, Atlassian, Okta)
 - [ ] All sections start collapsed on first load of customer portal (`sectionsCollapsed: true`)
