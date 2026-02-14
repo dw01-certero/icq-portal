@@ -1567,6 +1567,16 @@ function passGate() {
   document.querySelectorAll('.toggle-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === state.templateMode);
   });
+  // Grey out the non-relevant mode toggle on customer portals
+  if (typeof CUSTOMER_CONFIG !== 'undefined' && CUSTOMER_CONFIG) {
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      if (btn.dataset.mode !== state.templateMode) {
+        btn.style.opacity = '0.3';
+        btn.style.pointerEvents = 'none';
+        btn.style.cursor = 'default';
+      }
+    });
+  }
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === state.activeTab);
   });
@@ -1990,6 +2000,8 @@ function handleAssignee(el) {
 }
 
 function setMode(mode) {
+  // Prevent mode switching on customer portals
+  if (typeof CUSTOMER_CONFIG !== 'undefined' && CUSTOMER_CONFIG) return;
   state.templateMode = mode;
   document.querySelectorAll('.toggle-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.mode === mode);
