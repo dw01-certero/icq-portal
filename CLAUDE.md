@@ -10,7 +10,7 @@
 |-------|-------|
 | **Project** | ITAM ICQ Portal |
 | **Version** | 2.0 |
-| **Last Updated** | 2026-02-13 |
+| **Last Updated** | 2026-02-14 |
 | **Technology** | Single-file static HTML/CSS/JS |
 | **Main File** | `index.html` (or `index2.html` if index.html is locked) |
 | **Reference Material** | `Reference Material/` directory |
@@ -231,11 +231,12 @@ The ICQ portal supports generating customer-specific portals from Jira TMT4 onbo
 ### Key Files
 | File | Purpose |
 |------|---------|
-| `index2.html` | Base template with `CUSTOMER_CONFIG` support |
+| `index.html` / `index2.html` | Base template with `CUSTOMER_CONFIG` support |
 | `generate-customer.ps1` | PowerShell script to inject config and generate portal |
 | `customers/` | Output directory for generated portals |
 | `customers/index.html` | Landing page listing all portals |
-| `.github/workflows/deploy.yml` | GitHub Pages deployment workflow |
+| `customers/assets/icq-icon.svg` | Certero-branded icon for Jira remote links |
+| `.github/workflows/pages.yml` | GitHub Pages deployment (deploys repo root) |
 
 ### CUSTOMER_CONFIG
 When present at the top of the `<script>` block, the `CUSTOMER_CONFIG` object:
@@ -243,13 +244,25 @@ When present at the top of the `<script>` block, the `CUSTOMER_CONFIG` object:
 - Pre-populates customer name, user name, and deployment mode
 - Locks non-purchased sections (greyed out, no scope toggle, notice banner)
 - Pre-selects technology options (e.g., SaaS connectors)
+- Greys out the non-relevant hosting mode toggle
 - Adds Jira ticket reference to exported JSON
 
 ### Generating a Portal
 ```
 /icq-generate TMT4-154
 ```
-This reads the Jira ticket, maps products/modules to sections, and writes to `customers/<NAME>/index.html`.
+This reads the Jira ticket, maps products/modules to sections, writes to `customers/<NAME>/index.html`, commits and pushes to deploy via GitHub Pages, then adds a remote link and summary comment on the Jira ticket.
+
+### GitHub Pages
+- **URL pattern:** `https://dw01-certero.github.io/icq-portal/customers/<NAME>/`
+- **Deployment:** `pages.yml` deploys from repo root on push to `main`
+- **Do NOT create a separate deploy workflow** — it conflicts with `pages.yml` and causes 404s
+
+### Jira Integration
+- **Remote link:** Added to the ticket with `🟣 Open ICQ Portal` title and custom icon
+- **Comment:** Summary table posted with customer details and portal URL
+- **Icon:** Hosted at `customers/assets/icq-icon.svg` (gradient "Q" on purple)
+- **Limitation:** Remote links cannot be deleted via API — must be removed manually from Jira UI
 
 ---
 

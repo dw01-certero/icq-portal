@@ -55,9 +55,9 @@ Generate a summary with these sections:
 - **Sections with Tech Selectors:** [list]
 
 ## Customer Portals Generated
-| Customer | Jira Ticket | Hosting | URL |
-|----------|------------|---------|-----|
-| ROMO | TMT4-154 | On-Prem | https://dw01-certero.github.io/icq-portal/customers/ROMO/ |
+| Customer | Jira Ticket | Hosting | URL | Jira Link |
+|----------|------------|---------|-----|-----------|
+| ROMO | TMT4-154 | On-Prem | https://dw01-certero.github.io/icq-portal/customers/ROMO/ | Remote link + comment added |
 
 ## Git Status
 - **Branch:** [current branch]

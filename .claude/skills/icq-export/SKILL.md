@@ -92,4 +92,5 @@ Lists all generated customer portals from the `customers/` directory:
 - Jira ticket (from CUSTOMER_CONFIG)
 - Hosting model
 - Number of in-scope vs locked sections
-- GitHub Pages URL
+- GitHub Pages URL (`https://dw01-certero.github.io/icq-portal/customers/<NAME>/`)
+- Jira remote link status (if link exists on ticket)

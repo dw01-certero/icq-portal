@@ -11,6 +11,7 @@ Write-Host "  3. Open portal        - Verify changes in browser"
 Write-Host "  4. Check file lock    - Ensure index.html is the latest version"
 Write-Host "  5. git status         - Check for uncommitted changes"
 Write-Host "  6. git push           - Push to GitHub (updates Pages)"
+Write-Host "  7. Jira links         - Verify remote links on any generated tickets"
 Write-Host ""
 
 # Check for uncommitted changes

@@ -98,6 +98,16 @@ You:
 - [ ] localStorage save/load works (refresh preserves answers)
 - [ ] Non-locked conditional sections can still be toggled normally
 
+### 9. Jira Integration Verification (after `/icq-generate`)
+- [ ] Remote link exists on the Jira ticket with correct portal URL
+- [ ] Remote link title contains `🟣 Open ICQ Portal`
+- [ ] Remote link icon URL points to `https://dw01-certero.github.io/icq-portal/customers/assets/icq-icon.svg`
+- [ ] Remote link icon SVG is accessible (not 404)
+- [ ] Jira comment exists with deployment summary table
+- [ ] Jira comment includes correct customer name, hosting model, and portal URL
+- [ ] Portal URL in Jira link matches the actual GitHub Pages URL
+- [ ] GitHub Pages deployment has completed (no 404 on portal URL)
+
 ### 6. Accessibility
 - [ ] Color contrast meets WCAG AA (text on dark background)
 - [ ] Interactive elements are keyboard accessible
@@ -161,3 +171,6 @@ You:
 8. **Customer portal: locked sections** still showing scope toggle
 9. **Customer portal: CUSTOMER_CONFIG comment** not replaced (generation script failure)
 10. **Customer portal: GitHub Pages 404** if deploy workflow conflicts with pages.yml
+11. **Customer portal: Jira icon broken** if URL path is wrong (must be `/customers/assets/` not `/assets/`)
+12. **Customer portal: duplicate Jira remote links** (old links can't be deleted via API)
+13. **Customer portal: mode toggle not greyed** if CUSTOMER_CONFIG check missing from passGate()

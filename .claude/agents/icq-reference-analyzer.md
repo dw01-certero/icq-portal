@@ -125,3 +125,5 @@ To check if a question already exists in the portal:
 - Always preserve the original question numbering from the source for traceability
 - New sections added from reference material may need to be mapped to Jira products in the `/icq-generate` skill
 - Check `index2.html` as the canonical template if `index.html` is browser-locked
+- New sections added from reference material may require regeneration of existing customer portals via `/icq-generate`
+- After regeneration, commit and push to deploy, then Jira remote links and comments are auto-created on the ticket

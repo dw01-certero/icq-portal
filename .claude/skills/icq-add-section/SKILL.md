@@ -90,4 +90,5 @@ When adding new sections that correspond to purchasable Certero products or modu
 1. Update the **product-to-section mapping** in `.claude/skills/icq-generate/SKILL.md`
 2. Existing generated customer portals in `customers/` are **not** automatically updated
 3. If the new section is `conditional: true`, it can be locked via `CUSTOMER_CONFIG.lockedSections` in customer portals
-4. After adding, consider regenerating affected customer portals with `/icq-generate`
+4. After adding, regenerate affected customer portals with `/icq-generate` (this also commits, pushes, and updates Jira links/comments)
+5. GitHub Pages URL: `https://dw01-certero.github.io/icq-portal/customers/<NAME>/`

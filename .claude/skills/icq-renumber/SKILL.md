@@ -86,4 +86,6 @@ Renumbering sections in the base template **breaks existing customer portals** b
 After renumbering:
 1. Update the product-to-section mapping in `icq-generate/SKILL.md`
 2. Regenerate all customer portals in `customers/` using `/icq-generate`
-3. Commit and push to update GitHub Pages
+3. Commit and push to update GitHub Pages (`pages.yml` deploys from repo root)
+4. Jira remote links on tickets will still work since the URL uses customer name, not section IDs
+5. Jira comments referencing section counts may become stale — consider re-commenting

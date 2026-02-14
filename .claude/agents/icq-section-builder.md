@@ -136,4 +136,6 @@ When adding new sections, be aware of the customer portal generation system:
 - New **conditional** sections are automatically lockable via `CUSTOMER_CONFIG.lockedSections`
 - The product-to-section mapping in `C:\Repo\ICQ\.claude\skills\icq-generate\SKILL.md` may need updating if a new section maps to a specific Jira product/module
 - After adding a section, update the mapping table in the icq-generate SKILL.md if it corresponds to a purchasable product
-- Existing generated customer portals (in `customers/`) are NOT automatically updated — they must be regenerated
+- Existing generated customer portals (in `customers/`) are NOT automatically updated — they must be regenerated with `/icq-generate`
+- After regeneration, git commit and push to deploy via GitHub Pages (`pages.yml` handles deployment)
+- Jira remote links on existing tickets will still point to the old portal — the URL doesn't change if the customer name stays the same

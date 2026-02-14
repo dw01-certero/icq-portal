@@ -130,3 +130,5 @@ When validating files in `customers/*/index.html`:
 - Verify Reset button has `style="display:none"`
 - Verify page title includes customer name
 - Verify header includes customer name
+- Verify Jira reference footer is present with correct ticket key and link
+- Verify non-relevant mode toggle is greyed out (opacity 0.3, pointer-events none)
