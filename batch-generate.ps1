@@ -95,8 +95,10 @@ $saasMapping = @{
     "Okta" = "okta"
 }
 
-# All conditional section IDs
-$allConditionalSections = @("1.8","2.8","2.9","2.10","2.11","2.12","2.13","2.14","2.16","2.17","2.18","2.19","2.20","2.21")
+# All conditional section IDs that can be locked by product scope
+# Note: 2.11-2.14 (SNMP, Intune, Meraki, ServiceNow) are NOT locked — they always
+# appear in the Full ICQ tab with a user-togglable "In Scope" checkbox
+$allConditionalSections = @("1.8","2.8","2.9","2.10","2.16","2.17","2.18","2.19","2.20","2.21")
 
 function Get-InScopeSections {
     param($Products, $ITAMModules)
@@ -107,7 +109,7 @@ function Get-InScopeSections {
         $inScope += @("1.0","1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.9","2.1","2.2","2.3","2.4","2.5","2.6","2.7","2.15")
 
         if ($ITAMModules -contains "Inventory") { $inScope += @("2.3","2.4") }
-        if ($ITAMModules -contains "ITAM Connectors") { $inScope += @("2.11","2.12","2.13","2.14") }
+        # 2.11-2.14 always shown with user toggle — not gated by ITAM Connectors
         if ($ITAMModules -match "Application Monitoring") { $inScope += @("2.9") }
         if ($ITAMModules -contains "Distribution") { $inScope += @("2.8") }
         if ($ITAMModules -contains "Patch Management") { $inScope += @("1.8","2.10") }
